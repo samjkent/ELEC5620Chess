@@ -53,7 +53,7 @@ void kbd_setup(void){
  *
  */
 void kbd_interrupt(void){
-	char key_pressed = *PS2_Data & 0xFF;
+	unsigned char key_pressed = *PS2_Data & 0xFF;
 
 	switch(key_pressed){
 		case KEY_UP:

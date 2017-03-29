@@ -4,9 +4,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../DE1-SoC_LT24.c \
+../Delay.c \
 ../main.c 
 
 OBJS += \
+./DE1-SoC_LT24.o \
+./Delay.o \
 ./main.o 
 
 
