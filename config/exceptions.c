@@ -27,7 +27,7 @@ __IRQ __cs3_isr_irq (void)
 	int int_ID = *((int *) address); 
    
 	// check if interrupt is from the PS2 port
-	if (int_ID == 544) // : Check if 544 is correct? Datasheet = 79
+	if (int_ID == 79) // : Check if 544 is correct? Datasheet = 79
 		kbd_interrupt ();
 	else
 		// if unexpected, then stay here
