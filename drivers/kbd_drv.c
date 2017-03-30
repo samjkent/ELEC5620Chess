@@ -21,6 +21,10 @@
 void board_move(int x);
 
 extern int cursor_xy[2];
+<<<<<<< HEAD
+=======
+volatile int break_code = 0;
+>>>>>>> refs/remotes/origin/main-dev
 
 void board_move(int direction) {
 	// Update cursor position
@@ -35,7 +39,11 @@ void board_move(int direction) {
 			if(cursor_xy[0] != 0) cursor_xy[0]--;
 			break;
 		case 3:
+<<<<<<< HEAD
 			if(cursor_xy[1] < 7) cursor_xy[0]++;
+=======
+			if(cursor_xy[0] < 7) cursor_xy[0]++;
+>>>>>>> refs/remotes/origin/main-dev
 			break;
 	}
 }
@@ -53,8 +61,27 @@ void kbd_setup(void){
  *
  */
 void kbd_interrupt(void){
+<<<<<<< HEAD
 	char key_pressed = *PS2_Data & 0xFF;
 
+=======
+	unsigned char key_pressed = *PS2_Data & 0xFF;
+
+	// Check if previous value was break code
+	if(break_code){
+		break_code = 0;
+		return;
+	}
+
+	// Check for break code
+	// Ignore next key press
+	if(key_pressed == 0xF0){
+		break_code = 1;
+		return;
+	}
+
+	// Key -> Movement
+>>>>>>> refs/remotes/origin/main-dev
 	switch(key_pressed){
 		case KEY_UP:
 		case KEY_W:
