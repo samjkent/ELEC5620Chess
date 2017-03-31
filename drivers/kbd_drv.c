@@ -21,10 +21,8 @@
 void board_move(int x);
 
 extern int cursor_xy[2];
-<<<<<<< HEAD
-=======
+extern char board_highlight[8];
 volatile int break_code = 0;
->>>>>>> refs/remotes/origin/main-dev
 
 void board_move(int direction) {
 	// Update cursor position
@@ -39,13 +37,33 @@ void board_move(int direction) {
 			if(cursor_xy[0] != 0) cursor_xy[0]--;
 			break;
 		case 3:
-<<<<<<< HEAD
-			if(cursor_xy[1] < 7) cursor_xy[0]++;
-=======
 			if(cursor_xy[0] < 7) cursor_xy[0]++;
->>>>>>> refs/remotes/origin/main-dev
 			break;
 	}
+}
+
+/**
+ *  Remove selection
+ */
+void board_deselect(void){
+	board_highlight[0] = 0;
+	board_highlight[1] = 0;
+	board_highlight[2] = 0;
+	board_highlight[3] = 0;
+	board_highlight[4] = 0;
+	board_highlight[5] = 0;
+	board_highlight[6] = 0;
+	board_highlight[7] = 0;
+}
+
+
+/**
+ *  Highlight selected square
+ */
+void board_select(void){
+	board_deselect();
+	// Copy current xy position to selected position
+	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
 }
 
 /**
@@ -61,10 +79,6 @@ void kbd_setup(void){
  *
  */
 void kbd_interrupt(void){
-<<<<<<< HEAD
-	char key_pressed = *PS2_Data & 0xFF;
-
-=======
 	unsigned char key_pressed = *PS2_Data & 0xFF;
 
 	// Check if previous value was break code
@@ -81,7 +95,6 @@ void kbd_interrupt(void){
 	}
 
 	// Key -> Movement
->>>>>>> refs/remotes/origin/main-dev
 	switch(key_pressed){
 		case KEY_UP:
 		case KEY_W:
@@ -100,10 +113,11 @@ void kbd_interrupt(void){
 			board_move(3);
 			break;
 		case KEY_SPACE:
-		case KEY_ENTER:
-		// case KEY_ENTER2:
-			// board_select();
+		case KEY_ENTER: // Both Enter Keys will work. RHS Enter sends E05A so will still match this case with the second byte
+			board_select();
 			break;
+		case KEY_ESC:
+			board_deselect();
 		default:
 			// Do nothing
 			break;
