@@ -21,7 +21,7 @@
 void board_move(int x);
 
 extern int cursor_xy[2];
-extern int selected_xy[2];
+extern char board_highlight[8];
 volatile int break_code = 0;
 
 void board_move(int direction) {
@@ -43,21 +43,27 @@ void board_move(int direction) {
 }
 
 /**
- *  Highlight selected square
- */
-void board_select(void){
-	// Copy current xy position to selected position
-	selected_xy[0] = cursor_xy[0];
-	selected_xy[1] = cursor_xy[1];
-}
-
-/**
  *  Remove selection
  */
 void board_deselect(void){
+	board_highlight[0] = 0;
+	board_highlight[1] = 0;
+	board_highlight[2] = 0;
+	board_highlight[3] = 0;
+	board_highlight[4] = 0;
+	board_highlight[5] = 0;
+	board_highlight[6] = 0;
+	board_highlight[7] = 0;
+}
+
+
+/**
+ *  Highlight selected square
+ */
+void board_select(void){
+	board_deselect();
 	// Copy current xy position to selected position
-	selected_xy[0] = -1;
-	selected_xy[1] = -1;
+	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
 }
 
 /**
