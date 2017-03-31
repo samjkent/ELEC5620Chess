@@ -38,10 +38,9 @@ enum chess_pieces board[8][8] =
 	{ROO_W, KNI_W, BIS_W, QUE_W, KIN_W, BIS_W, KNI_W, ROO_W}
 };
 
-char board_highlight[8]= { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
+char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 int cursor_xy[2] = {0, 0};
-int selected_xy[2] = {-1, -1};
 
 void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
 void LCD_DrawBoard(enum chess_pieces board[8][8]);
@@ -206,10 +205,6 @@ void LCD_DrawBoard(enum chess_pieces board[8][8])
 
 			DrawCursor(cursor_xy[0],cursor_xy[1]);
 
-			// If tile has been selected
-			if(selected_xy[0] != -1){
-				DrawCursor(selected_xy[0],selected_xy[1]);
-			}
 		}
 	}
 
