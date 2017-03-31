@@ -7,12 +7,18 @@ C_SRCS += \
 ../DE1-SoC_LT24.c \
 ../Delay.c \
 ../graphics_chess.c \
+<<<<<<< HEAD
 ../main.c 
 
+=======
+../main.c 
+
+>>>>>>> calum-dev
 OBJS += \
 ./DE1-SoC_LT24.o \
 ./Delay.o \
 ./graphics_chess.o \
+<<<<<<< HEAD
 ./main.o 
 
 
@@ -25,3 +31,17 @@ OBJS += \
 	@echo ' '
 
 
+=======
+./main.o 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+%.o: ../%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: ARM C Compiler'
+	armcc -O0 --cpu=Cortex-A9.no_neon.no_vfp -g -c -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+
+>>>>>>> calum-dev

@@ -3,7 +3,7 @@
 #include "graphics_chess.h"
 #include "address_map_arm.h"
 #include "font8x8_basic.h"
-#include "drivers/vga_drv.h"
+
 
 char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
@@ -28,13 +28,11 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 				if (graphics_tile[j][i] & (0x80 >> k))
 				{
 					buffer[(j*TILE)+((i*8)+k)] = fg_colour;
-					vga_write_pixel(x*TILE+(j*TILE),y*TILE+((i*8)+k), fg_colour);
 					//LCD_WR_DATA(fg_colour);
 				}
 				else
 				{
 					buffer[(j*TILE)+((i*8)+k)] = bg_colour;
-					vga_write_pixel((j*TILE),((i*8)+k), bg_colour);
 					//LCD_WR_DATA(bg_colour);
 				}
 			}
