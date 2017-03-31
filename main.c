@@ -52,6 +52,9 @@ void LCD_DrawLine(int x, int y, int dx, int dy, unsigned short colour);
 void LCD_DrawRect(int x, int y, int dx, int dy, unsigned short colour);
 void DrawCursor(int x, int y);
 
+// VGA prototype
+void vga_write_pixel(int x, int z, short colour);
+
 void configure_interrupts(void);
 
 int main()

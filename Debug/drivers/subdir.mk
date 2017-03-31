@@ -4,12 +4,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../drivers/joystick_drv.c \
-../drivers/kbd_drv.c 
+../drivers/kbd_drv.c \
+../drivers/vga_drv.c 
 
 OBJS += \
-./drivers/joystick_drv.o \
-./drivers/kbd_drv.o 
+./drivers/kbd_drv.o \
+./drivers/vga_drv.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

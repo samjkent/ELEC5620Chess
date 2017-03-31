@@ -28,10 +28,10 @@ void board_move(int direction) {
 	// Update cursor position
 	switch(direction){
 		case 0:
-			if(cursor_xy[1] != 0) cursor_xy[1]--;
+			if(cursor_xy[1] < 7) cursor_xy[1]++;
 			break;
 		case 1:
-			if(cursor_xy[1] < 7) cursor_xy[1]++;
+			if(cursor_xy[1] != 0) cursor_xy[1]--;
 			break;
 		case 2:
 			if(cursor_xy[0] != 0) cursor_xy[0]--;
