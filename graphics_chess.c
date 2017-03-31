@@ -1,10 +1,9 @@
-
 #include "DE1-SoC_LT24.h"
 #include "Delay.h"
 #include "graphics_chess.h"
 #include "address_map_arm.h"
 #include "font8x8_basic.h"
-#include "vga_drv.h"
+#include "drivers/vga_drv.h"
 
 char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
@@ -12,8 +11,6 @@ int cursor_xy[2] = {0, 0};
 
 
 int strlen(const char * str);
-
-void write_vga_pixel(int x, int y, short colour);
 
 void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour)
 {
@@ -31,13 +28,13 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 				if (graphics_tile[j][i] & (0x80 >> k))
 				{
 					buffer[(j*TILE)+((i*8)+k)] = fg_colour;
-					write_vga_pixel((j*TILE),((i*8)+k), fg_colour);
+					vga_write_pixel((j*TILE),((i*8)+k), fg_colour);
 					//LCD_WR_DATA(fg_colour);
 				}
 				else
 				{
 					buffer[(j*TILE)+((i*8)+k)] = bg_colour;
-					write_vga_pixel((j*TILE),((i*8)+k), bg_colour);
+					vga_write_pixel((j*TILE),((i*8)+k), bg_colour);
 					//LCD_WR_DATA(bg_colour);
 				}
 			}
