@@ -1,0 +1,1 @@
+#define VGA_BASE_ADDR 0x08000000
