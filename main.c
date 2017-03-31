@@ -5,18 +5,19 @@
 #include "address_map_arm.h"
 #include "font8x8_basic.h"
 #include "stdio.h"
+#include "string.h"
 
-
-struct time {
+struct time
+{
 	unsigned int seconds;
 	unsigned int minutes;
 	unsigned int hours;
 };
 
-struct time time1 = {0,0,0};
+struct time time1 = {0,5,0};
 //struct time time2 = {0,0,0);
 
-enum chess_pieces board[8][8] =
+char board[8][8] =
 {
 	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
 	{PAW_B, PAW_B, PAW_B, PAW_B, PAW_B, PAW_B, PAW_B, PAW_B},
@@ -31,6 +32,7 @@ enum chess_pieces board[8][8] =
 void configure_interrupts(void);
 
 struct time tick(struct time time);
+struct time tock(struct time time);
 
 int main()
 {
@@ -53,19 +55,17 @@ int main()
 	LCD_Init();
 	ResetWDT();
 
-
+	LCD_DrawBoard(board);
 
 	while (1)
 	{
-		usleep(20000);
+		Delay_Ms(1000); //1s delay
 
-		LCD_DrawBoard(board);
+		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
 
-		sprintf(time_str,"%02d:%02d:%02d",time1.seconds,time1.minutes,time1.hours);
+		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
 
-		LCD_PutStr(0,0,time_str,LCD_WHITE,LCD_BLACK);
-
-		//time1 = tick(time1);
+		time1 = tock(time1);
 
 		ResetWDT();
 
@@ -79,9 +79,21 @@ struct time tick(struct time time)
 	time.seconds++;
 	if (time.seconds > 59) { time.seconds = 0; time.minutes++; }
 	if (time.minutes > 59) { time.minutes = 0; time.hours++; }
-	if (time.hours > 24) { time.hours = 0; }
-
-	return time;
+	if (time.hours > 23) { time.hours = 0; }
 
 	ResetWDT();
+
+	return time;
+}
+
+struct time tock(struct time time)
+{
+	time.seconds--;
+	if (time.seconds > 59) { time.seconds = 59; time.minutes--; }
+	if (time.minutes > 59) { time.minutes = 59; time.hours--; }
+	if (time.hours > 23) { time.hours = 23; }
+
+	ResetWDT();
+
+	return time;
 }

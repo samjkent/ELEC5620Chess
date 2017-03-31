@@ -4,14 +4,14 @@
 #include "graphics_chess.h"
 #include "address_map_arm.h"
 #include "font8x8_basic.h"
-
+#include "string.h"
 
 char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 int cursor_xy[2] = {0, 0};
 
 
-int strlen(const char * str);
+//int strlen(const char * str);
 
 void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour)
 {
@@ -48,7 +48,7 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 
 
 
-void LCD_DrawBoard(enum chess_pieces board[8][8])
+void LCD_DrawBoard(char board[8][8])
 {
 	int i, j;
 	unsigned short bg_colour;
@@ -164,7 +164,7 @@ void LCD_PutStr(int x, int y, unsigned char * string, unsigned short bg_colour, 
 {
 	int i, j, n;
 	int len = strlen(string);
-	unsigned short buffer[76800] = {0};
+	unsigned short buffer[1920] = {0};
 
 	if ( x < 0 ) { x = 0; }
 	if ( y < 0 ) { y = 0; }
