@@ -19,18 +19,18 @@
 							<targetPlatform id="com.arm.eclipse.build.config.baremetal.exe.debug.1221124612..730441572" name=""/>
 							<builder buildPath="${workspace_loc:/Chess/Debug}" id="com.arm.toolchain.baremetal.builder.1509529557" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="com.arm.toolchain.baremetal.builder"/>
 							<tool id="com.arm.tool.c.compiler.baremetal.exe.debug.489897467" name="ARM C Compiler" superClass="com.arm.tool.c.compiler.baremetal.exe.debug">
-								<option id="com.arm.tool.c.compiler.option.targetcpu.1869307416" superClass="com.arm.tool.c.compiler.option.targetcpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
+								<option id="com.arm.tool.c.compiler.option.targetcpu.1869307416" name="Target CPU (--cpu)" superClass="com.arm.tool.c.compiler.option.targetcpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
 								<inputType id="com.arm.tool.c.compiler.input.467998699" superClass="com.arm.tool.c.compiler.input"/>
 								<inputType id="com.arm.tool.cpp.compiler.input.1203568380" superClass="com.arm.tool.cpp.compiler.input"/>
 							</tool>
 							<tool id="com.arm.tool.cpp.compiler.baremetal.exe.debug.1182201708" name="ARM C++ Compiler" superClass="com.arm.tool.cpp.compiler.baremetal.exe.debug"/>
 							<tool id="com.arm.tool.assembler.1548645171" name="ARM Assembler" superClass="com.arm.tool.assembler">
-								<option id="com.arm.tool.assembler.option.cpu.441413537" superClass="com.arm.tool.assembler.option.cpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
+								<option id="com.arm.tool.assembler.option.cpu.441413537" name="Target CPU (--cpu)" superClass="com.arm.tool.assembler.option.cpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
 							</tool>
 							<tool id="com.arm.tool.c.linker.1983801727" name="ARM Linker" superClass="com.arm.tool.c.linker">
-								<option id="com.arm.tool.c.linker.option.entry.750945834" superClass="com.arm.tool.c.linker.option.entry" value="__main" valueType="string"/>
-								<option id="com.arm.tool.c.linker.option.cpu.227221964" superClass="com.arm.tool.c.linker.option.cpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
-								<option id="com.arm.tool.c.linker.option.scatter.1182835179" superClass="com.arm.tool.c.linker.option.scatter" value="M:\ds5\Chess\config\scatter.scat" valueType="string"/>
+								<option id="com.arm.tool.c.linker.option.entry.750945834" name="Image entry point (--entry)" superClass="com.arm.tool.c.linker.option.entry" value="__main" valueType="string"/>
+								<option id="com.arm.tool.c.linker.option.cpu.227221964" name="Target CPU (--cpu)" superClass="com.arm.tool.c.linker.option.cpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
+								<option id="com.arm.tool.c.linker.option.scatter.1182835179" name="Scatter file (--scatter)" superClass="com.arm.tool.c.linker.option.scatter" value="/home/sam/ds5/ELEC5620Chess/config/scatter.scat" valueType="string"/>
 							</tool>
 							<tool id="com.arm.tool.librarian.1820119739" name="ARM Librarian" superClass="com.arm.tool.librarian"/>
 						</toolChain>
