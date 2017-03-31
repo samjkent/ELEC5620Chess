@@ -22,7 +22,22 @@ enum chess_pieces {
 	ERROR
 };
 
-extern enum chess_pieces board[8][8];
+#define BLANK  '.'
+#define PAW_W  '!'
+#define KNI_W  'P'
+#define BIS_W  'N'
+#define ROO_W  'B'
+#define QUE_W  'R'
+#define KIN_W  'Q'
+#define PAW_B  'K'
+#define KNI_B  'p'
+#define BIS_B  'n'
+#define ROO_B  'b'
+#define QUE_B  'r'
+#define KIN_B  'q'
+#define ERROR  'k'
+
+extern char board[8][8];
 /*=
 {
 	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
@@ -37,7 +52,7 @@ extern enum chess_pieces board[8][8];
 
 
 void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
-void LCD_DrawBoard(enum chess_pieces board[8][8]);
+void LCD_DrawBoard(char board[8][8]);
 
 void LCD_PutChar(int x, int y, unsigned char ch, unsigned short bg_colour, unsigned short fg_colour);
 void LCD_PutStr(int x, int y, unsigned char * string, unsigned short bg_colour, unsigned short fg_colour);

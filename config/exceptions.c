@@ -27,8 +27,11 @@ __IRQ __cs3_isr_irq (void)
 	int int_ID = *((int *) address); 
    
 	// check if interrupt is from the PS2 port
-	if (int_ID == PS2_IRQ) // TODO: Check if 544 is correct? Datasheet = 79
+	if (int_ID == PS2_IRQ)
 		kbd_interrupt ();
+	else if(int_ID == MPCORE_PRIV_TIMER_IRQ){
+		decrease_time1();
+	}
 	else
 		// if unexpected, then stay here
 		while (1);

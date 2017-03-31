@@ -17,6 +17,7 @@
  */
 
 #include "kbd_drv.h"
+#include "../graphics_chess.h"
 
 void board_move(int x);
 
@@ -118,10 +119,13 @@ void kbd_interrupt(void){
 			break;
 		case KEY_ESC:
 			board_deselect();
+			break;
 		default:
 			// Do nothing
 			break;
 	}
+
+	LCD_DrawBoard(board);
 
 
 }

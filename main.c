@@ -14,7 +14,7 @@ struct time
 	unsigned int hours;
 };
 
-struct time time1 = {0,5,0};
+struct time time1 = {0,0,0};
 //struct time time2 = {0,0,0);
 
 char board[8][8] =
@@ -33,6 +33,8 @@ void configure_interrupts(void);
 
 struct time tick(struct time time);
 struct time tock(struct time time);
+
+void decrease_time1(void);
 
 int main()
 {
@@ -57,16 +59,21 @@ int main()
 
 	LCD_DrawBoard(board);
 
+	time1.hours = 0;
+	time1.minutes = 5; 	 // 5 minute countdown
+	time1.seconds = 0;
+	utimer_irq(1000000); // set 1s timer w/ auto reload
+
 	while (1)
 	{
-		Delay_Ms(1000); //1s delay
 
 		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
 
 		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
 
-		time1 = tock(time1);
+		__asm("WFE");
 
+		// Sleep until PS/2 or timer interrupt
 		ResetWDT();
 
 	}
@@ -97,3 +104,18 @@ struct time tock(struct time time)
 
 	return time;
 }
+
+void decrease_time1(void)
+{
+	// Clear interrupt
+	*(unsigned int *) 0xFFFEC60C = 0x1;
+
+	time1.seconds--;
+	if (time1.seconds > 59) { time1.seconds = 59; time1.minutes--; }
+	if (time1.minutes > 59) { time1.minutes = 59; time1.hours--; }
+	if (time1.hours > 23) { time1.hours = 23; }
+
+	ResetWDT();
+
+}
+

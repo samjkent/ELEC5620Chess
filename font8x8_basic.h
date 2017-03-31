@@ -1,5 +1,5 @@
-#ifndef FONT_8X8_BASIC_
-#define FONT_8X8_BASIC_
+#ifndef Font_8x8
+#define Font_8x8
 
 /** 
  * 8x8 monochrome bitmap fonts for rendering

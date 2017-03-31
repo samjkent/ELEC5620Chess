@@ -85,6 +85,8 @@ void config_GIC(void)
 
     config_interrupt(PS2_IRQ,1);
 
+    config_interrupt(MPCORE_PRIV_TIMER_IRQ, 1);
+
     // Set Interrupt Priority Mask Register (ICCPMR)
     // Enable interrupts of all priorities
     address = MPCORE_GIC_CPUIF + ICCPMR;

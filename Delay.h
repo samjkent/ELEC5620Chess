@@ -10,4 +10,6 @@ void Delay_Ms(int x);
 //Function to reset watchdog
 void ResetWDT(void);
 
+void utimer_irq(int);
+
 #endif //DELAY_H_
