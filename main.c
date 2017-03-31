@@ -62,7 +62,7 @@ int main()
 
 		sprintf(time_str,"%02d:%02d:%02d",time1.seconds,time1.minutes,time1.hours);
 
-		LCD_PutStr(0,0,time_str,LCD_WHITE,LCD_BLACK);
+		// LCD_PutStr(0,0,time_str,LCD_WHITE,LCD_BLACK);
 
 		//time1 = tick(time1);
 
