@@ -1,3 +1,4 @@
+
 #include "DE1-SoC_LT24.h"
 #include "Delay.h"
 #include "graphics_chess.h"
@@ -37,7 +38,7 @@ enum chess_pieces board[8][8] =
 	{ROO_W, KNI_W, BIS_W, QUE_W, KIN_W, BIS_W, KNI_W, ROO_W}
 };
 
-extern char board_highlight[8][8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 int cursor_xy[2] = {0, 0};
 
@@ -82,18 +83,16 @@ int main()
 
 		LCD_DrawBoard(board);
 		//LCD_DrawRect(24,24,23,23,LCD_CYAN);
-		DrawCursor(cursor_xy[0],cursor_xy[1]);
+		//DrawCursor(cursor_xy[0],cursor_xy[1]);
 		//LCD_PutStr(10,10,cal,LCD_WHITE,LCD_BLACK);
 		//LCD_PutStr(0,280,"AaBbCcDdEeFfGgHhIiJjKkLlMm",LCD_BLUE,LCD_RED);
 		//LCD_PutStr(0,289,"NnOoPpQqRrSsTtUuVvWwXxYyZz",LCD_GREEN,LCD_YELLOW);
 		//LCD_PutStr(0,298,"0123456789.,/?!#@()+-*=   ",LCD_CYAN,LCD_MAGENTA);
 
-
-
 		ResetWDT();
 
 	}
-
+    
 
 }
 
@@ -149,49 +148,62 @@ void LCD_DrawBoard(enum chess_pieces board[8][8])
 			{
 			case BLANK :
 				LCD_DrawTile(i+1, j+1, graphics_blank, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case PAW_W :
 				LCD_DrawTile(i+1, j+1, graphics_pawn, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case KNI_W :
 				LCD_DrawTile(i+1, j+1, graphics_knight, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case BIS_W :
 				LCD_DrawTile(i+1, j+1, graphics_bishop, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case ROO_W :
 				LCD_DrawTile(i+1, j+1, graphics_rook, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case QUE_W :
 				LCD_DrawTile(i+1, j+1, graphics_queen, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case KIN_W :
 				LCD_DrawTile(i+1, j+1, graphics_king, bg_colour, LCD_WHITE);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case PAW_B :
 				LCD_DrawTile(i+1, j+1, graphics_pawn, bg_colour, LCD_BLACK);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case KNI_B :
 				LCD_DrawTile(i+1, j+1, graphics_knight, bg_colour, LCD_BLACK);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case BIS_B :
 				LCD_DrawTile(i+1, j+1, graphics_bishop, bg_colour, LCD_BLACK);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case ROO_B :
 				LCD_DrawTile(i+1, j+1, graphics_rook, bg_colour, LCD_BLACK);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case QUE_B :
 				LCD_DrawTile(i+1, j+1, graphics_queen, bg_colour, LCD_BLACK);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case KIN_B :
 				LCD_DrawTile(i+1, j+1, graphics_king, bg_colour, LCD_BLACK);
+				if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			default :
-				LCD_DrawTile(i+1, j+1, graphics_blank, bg_colour, LCD_WHITE);
+				//LCD_DrawTile(i+1, j+1, graphics_blank, bg_colour, LCD_WHITE);
 				break;
 			}
 
-			//DrawCursor(cursor_xy[0],cursor_xy[1]);
+			DrawCursor(cursor_xy[0],cursor_xy[1]);
 
 		}
 	}
@@ -321,4 +333,3 @@ void DrawCursor(int x, int y)
 {
 	LCD_DrawRect((x+1) * 24, (y+1) * 24, TILE, TILE, LCD_MAGENTA);
 }
-

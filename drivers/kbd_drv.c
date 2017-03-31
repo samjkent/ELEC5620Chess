@@ -21,6 +21,7 @@
 void board_move(int x);
 
 extern int cursor_xy[2];
+extern char board_highlight[8];
 volatile int break_code = 0;
 
 void board_move(int direction) {
@@ -39,6 +40,30 @@ void board_move(int direction) {
 			if(cursor_xy[0] < 7) cursor_xy[0]++;
 			break;
 	}
+}
+
+/**
+ *  Remove selection
+ */
+void board_deselect(void){
+	board_highlight[0] = 0;
+	board_highlight[1] = 0;
+	board_highlight[2] = 0;
+	board_highlight[3] = 0;
+	board_highlight[4] = 0;
+	board_highlight[5] = 0;
+	board_highlight[6] = 0;
+	board_highlight[7] = 0;
+}
+
+
+/**
+ *  Highlight selected square
+ */
+void board_select(void){
+	board_deselect();
+	// Copy current xy position to selected position
+	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
 }
 
 /**
@@ -88,10 +113,11 @@ void kbd_interrupt(void){
 			board_move(3);
 			break;
 		case KEY_SPACE:
-		case KEY_ENTER:
-		// case KEY_ENTER2:
-			// board_select();
+		case KEY_ENTER: // Both Enter Keys will work. RHS Enter sends E05A so will still match this case with the second byte
+			board_select();
 			break;
+		case KEY_ESC:
+			board_deselect();
 		default:
 			// Do nothing
 			break;
