@@ -41,6 +41,10 @@ void board_move(int direction) {
 			if(cursor_xy[0] < 7) cursor_xy[0]++;
 			break;
 	}
+
+	// Update board
+	LCD_DrawBoard(board);
+
 }
 
 /**
@@ -65,6 +69,7 @@ void board_select(void){
 	board_deselect();
 	// Copy current xy position to selected position
 	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
+	LCD_DrawBoard(board);
 }
 
 /**
@@ -124,8 +129,5 @@ void kbd_interrupt(void){
 			// Do nothing
 			break;
 	}
-
-	LCD_DrawBoard(board);
-
 
 }

@@ -70,10 +70,11 @@ int main()
 		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
 
 		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
-
-		__asm("WFE");
+		// LCD_DrawBoard(board);
 
 		// Sleep until PS/2 or timer interrupt
+		__asm("WFE");
+
 		ResetWDT();
 
 	}

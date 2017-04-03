@@ -5,6 +5,7 @@
 #include "address_map_arm.h"
 #include "font8x8_basic.h"
 #include "string.h"
+#include "drivers/vga_drv.h"
 
 char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
@@ -18,8 +19,6 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 	int i, j, k;
 	unsigned short buffer[576];
 
-
-
 	for (j = 0; j < TILE; j++)
 	{
 		for (i = 0; i < 3; i++)
@@ -30,11 +29,14 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 				{
 					buffer[(j*TILE)+((i*8)+k)] = fg_colour;
 					//LCD_WR_DATA(fg_colour);
+					// Switch x and y
+					vga_write_pixel(y*TILE+(j),x*TILE+((i*8)+k),fg_colour, 1);
 				}
 				else
 				{
 					buffer[(j*TILE)+((i*8)+k)] = bg_colour;
 					//LCD_WR_DATA(bg_colour);
+					vga_write_pixel(y*TILE+(j),x*TILE+((i*8)+k),bg_colour, 1);
 				}
 			}
 		}
@@ -52,6 +54,8 @@ void LCD_DrawBoard(char board[8][8])
 {
 	int i, j;
 	unsigned short bg_colour;
+
+	vga_clear_screen();
 
 	for (i = 0; i < 8; i++)
 	{
@@ -179,11 +183,13 @@ void LCD_PutStr(int x, int y, unsigned char * string, unsigned short bg_colour, 
 				if ( font8x8_basic[string[n]][i] & 1 << j)
 				{
 					buffer[(8*i*len)+((8*n)+j)] = fg_colour;
+					vga_write_pixel((i),((8*n)+j),fg_colour, 1);
 					ResetWDT();
 				}
 				else
 				{
 					buffer[(8*i*len)+((8*n)+j)] = bg_colour;
+					vga_write_pixel((i),((8*n)+j),bg_colour, 1);
 					ResetWDT();
 				}
 			}
@@ -220,13 +226,26 @@ void LCD_DrawLine(int x, int y, int dx, int dy, unsigned short colour)
 //Draw an orthogonal vector either Left->Right or Top->Bottom
 void LCD_DrawOrthoVect(int x, int y, int dir, int len, unsigned short colour)
 {
-	int i;
+	int i, length_count;
 	unsigned short buffer[LCD_HEIGHT];
 
 	for (i = 0; i < 320; i++) { buffer[i] = colour; }
 
-	if (dir) { LCD_Window(x,y,len,1); }
-	else if (!dir) { LCD_Window(x,y,1,len); }
+	if (dir) {
+		LCD_Window(x,y,len,1);
+		for(length_count = 0; length_count < len; length_count = length_count + 1){
+			// draw pixel
+			vga_write_pixel(y,x+length_count,colour, 1);
+		}
+	}
+	else if (!dir) {
+		LCD_Window(x,y,1,len);
+		for(length_count = 0; length_count < len; length_count = length_count + 1){
+			// draw pixel
+			vga_write_pixel(y+length_count,x,colour, 1);
+		}
+	}
+
 
 	LCD_Framebuffer(buffer,len);
 

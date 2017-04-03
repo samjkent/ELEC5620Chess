@@ -32,6 +32,10 @@ __IRQ __cs3_isr_irq (void)
 	else if(int_ID == MPCORE_PRIV_TIMER_IRQ){
 		decrease_time1();
 	}
+	else if(int_ID == 210){
+		// Do nothing
+		int_ID = 210;
+	}
 	else
 		// if unexpected, then stay here
 		while (1);
