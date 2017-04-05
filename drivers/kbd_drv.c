@@ -22,7 +22,10 @@
 void board_move(int x);
 
 extern int cursor_xy[2];
+extern int cursor_menu;
+extern int mode;
 extern char board_highlight[8];
+int refresh_display = 0;
 volatile int break_code = 0;
 
 void board_move(int direction) {
@@ -30,9 +33,11 @@ void board_move(int direction) {
 	switch(direction){
 		case 0:
 			if(cursor_xy[1] != 0) cursor_xy[1]--;
+			if(cursor_menu != 0) cursor_menu--;
 			break;
 		case 1:
 			if(cursor_xy[1] < 7) cursor_xy[1]++;
+			if(cursor_menu != 3) cursor_menu++;
 			break;
 		case 2:
 			if(cursor_xy[0] != 0) cursor_xy[0]--;
@@ -43,7 +48,7 @@ void board_move(int direction) {
 	}
 
 	// Update board
-	LCD_DrawBoard(board);
+	// LCD_DrawBoard(board);
 
 }
 
@@ -66,10 +71,18 @@ void board_deselect(void){
  *  Highlight selected square
  */
 void board_select(void){
+	if(mode == 0){
+		// Set mode
+		mode = cursor_menu + 1;
+
+		// Reset cursors
+		cursor_xy[0] = 0;
+		cursor_xy[1] = 0;
+		cursor_menu  = 0;
+	}
 	board_deselect();
 	// Copy current xy position to selected position
 	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
-	LCD_DrawBoard(board);
 }
 
 /**
@@ -129,5 +142,8 @@ void kbd_interrupt(void){
 			// Do nothing
 			break;
 	}
+
+	// Update display flag
+	refresh_display = 1;
 
 }

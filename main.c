@@ -36,10 +36,26 @@ struct time tock(struct time time);
 
 void decrease_time1(void);
 
+// Display Updates
+void display_menu(void);
+void display_game(void);
+
+// Refresh when something changes
+extern int refresh_display;
+int mode = 0; // Init to menu
+int cursor_menu;
+
+// Menu
+#define MENU 0
+unsigned char* menu_str;
+
+// Game
+unsigned char* time_str;
+#define GAME 1
+int game_begin = 1;
+
 int main()
 {
-
-	unsigned char time_str[8];
 
     // ARM A9 Private Timer load, value, control and interrupt addresses
     //volatile unsigned int *private_timer_load       = (unsigned int *) MPCORE_PRIV_TIMER;
@@ -57,20 +73,23 @@ int main()
 	LCD_Init();
 	ResetWDT();
 
-	LCD_DrawBoard(board);
-
-	time1.hours = 0;
-	time1.minutes = 5; 	 // 5 minute countdown
-	time1.seconds = 0;
+	// Initialise timer
 	utimer_irq(1000000); // set 1s timer w/ auto reload
 
 	while (1)
 	{
-
-		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
-
-		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
-		// LCD_DrawBoard(board);
+		switch(mode){
+			case MENU:
+				display_menu();
+				break;
+			case GAME:
+				display_game();
+				break;
+			default:
+				// Should be unreachable
+				while(1);
+				break;
+		}
 
 		// Sleep until PS/2 or timer interrupt
 		__asm("WFE");
@@ -80,6 +99,61 @@ int main()
 	}
     
 	return 0; //Unreachable
+}
+
+void display_menu(void){
+	if(refresh_display){
+		// Write menu
+		sprintf(menu_str,"DE1-SoC Chess");
+		LCD_PutStr(20,20,menu_str,LCD_BLACK,LCD_WHITE);
+
+		sprintf(menu_str,"1P vs AI");
+		LCD_PutStr(20,30,menu_str,LCD_BLACK,LCD_WHITE);
+
+		sprintf(menu_str,"2P - Local");
+		LCD_PutStr(20,40,menu_str,LCD_BLACK,LCD_WHITE);
+
+		sprintf(menu_str,"2P - Serial");
+		LCD_PutStr(20,50,menu_str,LCD_BLACK,LCD_WHITE);
+
+		sprintf(menu_str,"Highscores");
+		LCD_PutStr(20,60,menu_str,LCD_BLACK,LCD_WHITE);
+
+		// Clear cursor
+		sprintf(menu_str," ");
+		LCD_PutStr(10,30 ,menu_str,LCD_BLACK,LCD_WHITE);
+		LCD_PutStr(10,40 ,menu_str,LCD_BLACK,LCD_WHITE);
+		LCD_PutStr(10,50 ,menu_str,LCD_BLACK,LCD_WHITE);
+		LCD_PutStr(10,60 ,menu_str,LCD_BLACK,LCD_WHITE);
+
+		// Draw cursor
+		sprintf(menu_str,">");
+		LCD_PutStr(10,30 + (cursor_menu * 10),menu_str,LCD_BLACK,LCD_WHITE);
+	}
+}
+
+void display_game(void){
+	// Initial run
+	if(game_begin){
+		// Clear LCD
+		LCD_Clear(LCD_BLACK);
+
+		// Set timer
+		time1.hours = 0;
+		time1.minutes = 5; 	 // 5 minute countdown
+		time1.seconds = 0;
+
+		// Clear game_begin flag
+		game_begin = 0;
+	}
+
+	// Refresh the display only when something changes
+	if(refresh_display){
+		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
+		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
+		LCD_DrawBoard(board);
+		refresh_display = 0;
+	}
 }
 
 struct time tick(struct time time)
@@ -116,6 +190,7 @@ void decrease_time1(void)
 	if (time1.minutes > 59) { time1.minutes = 59; time1.hours--; }
 	if (time1.hours > 23) { time1.hours = 23; }
 
+	refresh_display = 1;
 	ResetWDT();
 
 }
