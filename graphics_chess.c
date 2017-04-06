@@ -55,8 +55,6 @@ void LCD_DrawBoard(char board[8][8])
 	int i, j;
 	unsigned short bg_colour;
 
-	vga_clear_screen();
-
 	for (i = 0; i < 8; i++)
 	{
 		for (j = 0; j < 8; j++)
@@ -183,13 +181,13 @@ void LCD_PutStr(int x, int y, unsigned char * string, unsigned short bg_colour, 
 				if ( font8x8_basic[string[n]][i] & 1 << j)
 				{
 					buffer[(8*i*len)+((8*n)+j)] = fg_colour;
-					vga_write_pixel((i),((8*n)+j),fg_colour, 1);
+					vga_write_pixel(y+(i),x+((8*n)+j),fg_colour, 1);
 					ResetWDT();
 				}
 				else
 				{
 					buffer[(8*i*len)+((8*n)+j)] = bg_colour;
-					vga_write_pixel((i),((8*n)+j),bg_colour, 1);
+					vga_write_pixel(y+(i),x+((8*n)+j),bg_colour, 1);
 					ResetWDT();
 				}
 			}

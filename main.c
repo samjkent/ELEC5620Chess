@@ -53,6 +53,7 @@ unsigned char* menu_str;
 unsigned char* time_str;
 #define GAME 1
 int game_begin = 1;
+int menu_begin = 1;
 
 int main()
 {
@@ -72,7 +73,7 @@ int main()
 	// Initialise LCD
 	LCD_Init();
 	ResetWDT();
-
+	vga_draw_test();
 	// Initialise timer
 	utimer_irq(1000000); // set 1s timer w/ auto reload
 
@@ -103,6 +104,12 @@ int main()
 
 void display_menu(void){
 	if(refresh_display){
+		if(menu_begin){
+			vga_draw_test();
+			LCD_Clear(LCD_BLACK);
+			menu_begin = 0;
+		}
+
 		// Write menu
 		sprintf(menu_str,"DE1-SoC Chess");
 		LCD_PutStr(20,20,menu_str,LCD_BLACK,LCD_WHITE);
@@ -137,6 +144,7 @@ void display_game(void){
 	if(game_begin){
 		// Clear LCD
 		LCD_Clear(LCD_BLACK);
+		vga_draw_test();
 
 		// Set timer
 		time1.hours = 0;

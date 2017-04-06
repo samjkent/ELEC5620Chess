@@ -1,5 +1,5 @@
 #include "vga_drv.h"
-#define VGA_DISABLE 1
+#define VGA_DISABLE 0
 // TODO: Add dual buffer support to remove flicker
 
 int x,y,offset;
@@ -20,8 +20,8 @@ void vga_write_pixel(int x, int y, short colour, int x_inv){
 void vga_draw_test(void){
 	for (x = 0; x < 320; x++){
 		for(y = 0; y < 240; y++){
-			colour_test = ~colour_test;
-			vga_write_pixel(x,y,colour_test, 1);
+			colour_test = colour_test + 1;
+			vga_write_pixel(x,y,colour_test, 0);
 		}
 	}
 }

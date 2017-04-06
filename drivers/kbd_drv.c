@@ -28,6 +28,9 @@ extern char board_highlight[8];
 int refresh_display = 0;
 volatile int break_code = 0;
 
+extern int menu_begin;
+extern int game_begin;
+
 void board_move(int direction) {
 	// Update cursor position
 	switch(direction){
@@ -79,6 +82,10 @@ void board_select(void){
 		cursor_xy[0] = 0;
 		cursor_xy[1] = 0;
 		cursor_menu  = 0;
+
+		// Reset game
+		game_begin = 1;
+
 	}
 	board_deselect();
 	// Copy current xy position to selected position
@@ -137,6 +144,12 @@ void kbd_interrupt(void){
 			break;
 		case KEY_ESC:
 			board_deselect();
+			break;
+		case KEY_Q:
+			//Quit
+			mode = 0;
+			// Reset menu
+			menu_begin = 1;
 			break;
 		default:
 			// Do nothing
