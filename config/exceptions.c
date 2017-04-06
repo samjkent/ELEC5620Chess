@@ -36,6 +36,14 @@ __IRQ __cs3_isr_irq (void)
 		// Do nothing
 		int_ID = 210;
 	}
+	//else if(int_ID == HPS_GPIO0_IRQ)
+	//{
+	//	read_byte();
+	//}
+	else if(int_ID == IrDA_IRQ)
+	{
+		read_ir_byte();
+	}
 	else
 		// if unexpected, then stay here
 		while (1);

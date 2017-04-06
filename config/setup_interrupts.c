@@ -29,6 +29,12 @@ void configure_interrupts()
     // configure PS/2 interrupt
     kbd_setup();
 
+    //configure GPIO interrupts
+    //gpio_init();
+
+    //configure IR Interrupts
+    ir_init();
+
     // enable interrupts
     enable_A9_interrupts();
 }
@@ -86,6 +92,10 @@ void config_GIC(void)
     config_interrupt(PS2_IRQ,1);
 
     config_interrupt(MPCORE_PRIV_TIMER_IRQ, 1);
+
+    //config_interrupt(HPS_GPIO0_IRQ, 1);
+
+    config_interrupt(IrDA_IRQ, 1);
 
     // Set Interrupt Priority Mask Register (ICCPMR)
     // Enable interrupts of all priorities

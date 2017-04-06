@@ -153,6 +153,9 @@ void display_game(void){
 
 		// Clear game_begin flag
 		game_begin = 0;
+
+		send_ir_byte(0x00);
+		send_ir_byte(0x44);
 	}
 
 	// Refresh the display only when something changes
