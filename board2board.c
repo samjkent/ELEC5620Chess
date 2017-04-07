@@ -90,7 +90,7 @@ void bit_timeout(void){
 	}
 	else
 	{
-		// send_data(0xF0F0);
+		*HPS_TIMER0_CONTROL &= ~0x1; //stop timer
 
 	}
 
@@ -117,6 +117,7 @@ void read_timeout(){
 		hps_start_timer1(BIT_PERIOD); // Reload
 	} else {
 		rx_data = rx_data >> 1; // Remove start bit
+		*HPS_TIMER1_CONTROL &= ~0x1; //stop timer
 	}
 
 }
