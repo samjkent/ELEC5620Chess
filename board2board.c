@@ -49,6 +49,8 @@ void JP1_init(void)
 void hps_timer_init(void)
 {
 	*HPS_TIMER0_CONTROL &= ~0x4; //enable irq
+	*HPS_TIMER1_CONTROL &= ~0x4; //enable irq
+
 }
 
 
