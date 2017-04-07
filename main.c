@@ -6,6 +6,8 @@
 #include "font8x8_basic.h"
 #include "stdio.h"
 #include "string.h"
+#include "ChessLogic/PieceMoves.h"
+#include "ChessLogic/ChessBoard.h"
 
 struct time
 {
@@ -17,6 +19,7 @@ struct time
 struct time time1 = {0,0,0};
 //struct time time2 = {0,0,0);
 
+/*
 char board[8][8] =
 {
 	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
@@ -28,6 +31,7 @@ char board[8][8] =
 	{PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W},
 	{ROO_W, KNI_W, BIS_W, QUE_W, KIN_W, BIS_W, KNI_W, ROO_W}
 };
+*/
 
 void configure_interrupts(void);
 
@@ -42,7 +46,7 @@ void display_game(void);
 
 // Refresh when something changes
 extern int refresh_display;
-int mode = 0; // Init to menu
+int mode = 1; // Init to menu
 int cursor_menu;
 
 // Menu
@@ -54,6 +58,8 @@ unsigned char* time_str;
 #define GAME 1
 int game_begin = 1;
 int menu_begin = 1;
+
+struct ChessBoard chess_board;
 
 int main()
 {
@@ -140,8 +146,12 @@ void display_menu(void){
 }
 
 void display_game(void){
+	// INIT
 	// Initial run
 	if(game_begin){
+		// Initialise chess board
+		chess_board = initChessBoard();
+
 		// Clear LCD
 		LCD_Clear(LCD_BLACK);
 		vga_draw_test();
@@ -155,11 +165,15 @@ void display_game(void){
 		game_begin = 0;
 	}
 
+	// UPDATE
+	// Check for input + test logic
+
+	// DRAW
 	// Refresh the display only when something changes
 	if(refresh_display){
 		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
 		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
-		LCD_DrawBoard(board);
+		LCD_DrawBoard(chess_board.board);
 		refresh_display = 0;
 	}
 }
