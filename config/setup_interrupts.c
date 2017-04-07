@@ -34,7 +34,12 @@ void configure_interrupts()
     //gpio_init();
 
     //configure IR Interrupts
-    ir_init();
+    //ir_init();
+
+    //configure JP1 interrupts
+    JP1_init();
+
+    hps_timer_init();
 
     // enable interrupts
     enable_A9_interrupts();
@@ -96,7 +101,11 @@ void config_GIC(void)
 
     //config_interrupt(HPS_GPIO0_IRQ, 1);
 
-    config_interrupt(IrDA_IRQ, 1);
+    //config_interrupt(IrDA_IRQ, 1);
+
+    config_interrupt(JP1_IRQ, 1);
+
+    config_interrupt(HPS_TIMER0_IRQ, 1);
 
     // Set Interrupt Priority Mask Register (ICCPMR)
     // Enable interrupts of all priorities

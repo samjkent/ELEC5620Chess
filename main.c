@@ -59,6 +59,9 @@ int menu_begin = 1;
 // IR Test
 void send_ir_byte(char);
 
+//Serial comms test
+void send_data(int data);
+
 int main()
 {
 
@@ -158,8 +161,10 @@ void display_game(void){
 		// Clear game_begin flag
 		game_begin = 0;
 
-		send_ir_byte(0x00);
-		send_ir_byte(0x44);
+		send_data(0xF0F0);
+
+		//send_ir_byte(0x00);
+		//send_ir_byte(0x44);
 	}
 
 	// Refresh the display only when something changes
