@@ -23,21 +23,21 @@ enum chess_pieces {
 };
 
 #define BLANK  '.'
-#define PAW_W  '!'
-#define KNI_W  'P'
-#define BIS_W  'N'
-#define ROO_W  'B'
-#define QUE_W  'R'
-#define KIN_W  'Q'
-#define PAW_B  'K'
-#define KNI_B  'p'
-#define BIS_B  'n'
-#define ROO_B  'b'
-#define QUE_B  'r'
-#define KIN_B  'q'
-#define ERROR  'k'
+#define PAW_W  'P'
+#define KNI_W  'N'
+#define BIS_W  'B'
+#define ROO_W  'R'
+#define QUE_W  'Q'
+#define KIN_W  'K'
+#define PAW_B  'p'
+#define KNI_B  'n'
+#define BIS_B  'b'
+#define ROO_B  'r'
+#define QUE_B  'q'
+#define KIN_B  'k'
+#define ERROR  '!'
 
-extern char board[8][8];
+//extern char board[8][8];
 /*=
 {
 	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
