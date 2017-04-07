@@ -50,7 +50,6 @@ void hps_timer_init(void)
 {
 	*HPS_TIMER0_CONTROL &= ~0x4; //enable irq
 	*HPS_TIMER1_CONTROL &= ~0x4; //enable irq
-
 }
 
 
@@ -83,6 +82,8 @@ void send_data(int data)
 
 void bit_timeout(void){
 
+
+	int clear = *HPS_TIMER0_EOI;
 	*JP1_DATA ^= (-((tx_data >> bit_count) & 0x1)^ *JP1_DATA) & (1 << TX_PIN); // set nth bit to x
 	++bit_count;
 
@@ -112,6 +113,8 @@ void read_data(void)
 }
 
 void read_timeout(){
+
+	int clear = *HPS_TIMER1_EOI;
 	rx_data ^= (-((*JP1_DATA >> bit_count) & 0x1)^ rx_data) & (1 << RX_PIN); // set nth bit to x
 	++bit_count;
 
