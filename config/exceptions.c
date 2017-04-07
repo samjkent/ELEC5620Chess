@@ -20,6 +20,8 @@
 void kbd_interrupt (void);
 void read_ir_byte(void);
 void bit_timeout(void);
+void read_timeout(void);
+void read_data(void);
 
 __IRQ __cs3_isr_irq (void)
 {
@@ -55,7 +57,7 @@ __IRQ __cs3_isr_irq (void)
 	}
 	else if(int_ID == JP1_IRQ){
 		read_data();
-	} else {
+	} else
 		// if unexpected, then stay here
 		while (1);
 
