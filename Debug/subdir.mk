@@ -6,12 +6,14 @@
 C_SRCS += \
 ../DE1-SoC_LT24.c \
 ../Delay.c \
+../board2board.c \
 ../graphics_chess.c \
 ../main.c 
 
 OBJS += \
 ./DE1-SoC_LT24.o \
 ./Delay.o \
+./board2board.o \
 ./graphics_chess.o \
 ./main.o 
 

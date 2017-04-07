@@ -12,6 +12,7 @@
  ******************************************************************************/
 
 void kbd_setup(void);
+void ir_init(void);
 
 void enable_A9_interrupts(void);
 void set_A9_IRQ_stack(void);

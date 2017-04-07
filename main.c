@@ -6,6 +6,7 @@
 #include "font8x8_basic.h"
 #include "stdio.h"
 #include "string.h"
+#include "drivers/vga_drv.h"
 
 struct time
 {
@@ -54,6 +55,9 @@ unsigned char* time_str;
 #define GAME 1
 int game_begin = 1;
 int menu_begin = 1;
+
+// IR Test
+void send_ir_byte(char);
 
 int main()
 {
