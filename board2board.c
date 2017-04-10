@@ -42,7 +42,7 @@ char buffer[2];
 void JP1_init(void)
 {
 	*JP1_DATA_DIR |= 0x1;
-	*JP1_IRQ_MASK |= 0x2;
+	*JP1_IRQ_MASK &= ~0x2; //Initialise to masked - unmask in 2p serial mode
 	*JP1_DATA |= 0x1;
 }
 
@@ -106,7 +106,7 @@ void bit_timeout(void){
 void read_data(void)
 {
 	*JP1_EDGE_CAP |= 0xFF;
-	*JP1_IRQ_MASK |= 0x2;
+	*JP1_IRQ_MASK &= ~0x2;
 	hps_start_timer1(BIT_PERIOD/2);
 	bit_count = 0;
 
@@ -115,14 +115,15 @@ void read_data(void)
 void read_timeout(){
 
 	int clear = *HPS_TIMER1_EOI;
-	rx_data ^= (-((*JP1_DATA >> bit_count) & 0x1)^ rx_data) & (1 << RX_PIN); // set nth bit to x
+	rx_data ^= (-((*JP1_DATA >> RX_PIN) & 0x1)^ rx_data) & (1 << bit_count); // set nth bit to x
 	++bit_count;
 
-	if(bit_count < 16){
+	if(bit_count < 17){
 		hps_start_timer1(BIT_PERIOD); // Reload
 	} else {
 		rx_data = rx_data >> 1; // Remove start bit
 		*HPS_TIMER1_CONTROL &= ~0x1; //stop timer
+		*JP1_IRQ_MASK |= 0x2;
 	}
 
 }

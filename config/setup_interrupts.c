@@ -107,6 +107,8 @@ void config_GIC(void)
 
     config_interrupt(HPS_TIMER0_IRQ, 1);
 
+    config_interrupt(HPS_TIMER1_IRQ, 1);
+
     // Set Interrupt Priority Mask Register (ICCPMR)
     // Enable interrupts of all priorities
     address = MPCORE_GIC_CPUIF + ICCPMR;
