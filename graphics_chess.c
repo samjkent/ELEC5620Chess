@@ -42,7 +42,7 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 		}
 	}
 
-	LCD_Window(x*TILE, y*TILE, TILE, TILE);
+	LCD_Window(x*TILE, 216 - (y*TILE), TILE, TILE);
 	LCD_Framebuffer(buffer,576);
 
 	ResetWDT();
@@ -59,10 +59,10 @@ void LCD_DrawBoard(char board[8][8])
 	{
 		for (j = 0; j < 8; j++)
 		{
-			if (i%2 == j%2) { bg_colour = LCD_LIGHTBROWN; }
-			else { bg_colour = LCD_DARKBROWN; }
+			if (i%2 == j%2) { bg_colour = LCD_DARKBROWN; }
+			else { bg_colour = LCD_LIGHTBROWN; }
 
-			switch (board[j][i])
+			switch (board[i][j])
 			{
 			case BLANK :
 				LCD_DrawTile(i+1, j+1, graphics_blank, bg_colour, LCD_WHITE);
