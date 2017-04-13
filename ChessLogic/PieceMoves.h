@@ -42,4 +42,6 @@ struct MoveCoordinateList getPawnCaptureMoves(struct ChessBoard board, struct Bo
 
 struct MoveCoordinateList getPawnThreatMoves(struct ChessBoard board, struct BoardCoordinate start);
 
+char isMoveInMoveList(struct MoveCoordinateList moveList, struct BoardCoordinate move);
+
 #endif

@@ -658,3 +658,17 @@ struct MoveCoordinateList mergeMoveCoordinateLists(struct MoveCoordinateList a, 
 
 	return merge_list;
 }
+
+char isMoveInMoveList(struct MoveCoordinateList moveList, struct BoardCoordinate move)
+{
+	int n;
+	for (n = 0; n < moveList.move_count; n++)
+	{
+		if (moveList.moves[n].x == move.x && moveList.moves[n].y == move.y)
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
