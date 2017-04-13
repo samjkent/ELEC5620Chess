@@ -24,6 +24,9 @@ void board_move(int x);
 extern int cursor_xy[2];
 extern int cursor_menu;
 extern int mode;
+
+extern int input_mode;
+
 extern char board_highlight[8];
 int refresh_display = 0;
 volatile int break_code = 0;
@@ -86,6 +89,13 @@ void board_select(void){
 		// Reset game
 		game_begin = 1;
 
+	}
+	else if (mode == 1)
+	{
+		if (input_mode == 0)
+		{
+			input_mode = 1;
+		}
 	}
 	board_deselect();
 	// Copy current xy position to selected position

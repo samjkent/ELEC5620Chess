@@ -29,10 +29,25 @@ struct BoardCoordinate
 	char y;
 };
 
+struct MoveCoordinateList
+{
+	struct BoardCoordinate moves[27];
+	char move_count;// = 0;
+};
+
 struct PieceList
 {
 	char pieces[16];
 };
+
+struct Move
+{
+	char piece;
+	char captured_piece; // = BLANK; // BLANK if no piece captured
+	struct BoardCoordinate start;
+	struct BoardCoordinate end;
+};
+
 
 struct ChessBoard
 {
@@ -77,10 +92,13 @@ struct ChessBoard
 	char fifty_move_counter;// = 0;
 };
 
+extern struct ChessBoard chess_board;
+
 struct BoardCoordinate BoardCoordinateConstructor(char x, char y);
 
-struct ChessBoard initChessBoard(void);
+void initChessBoard(struct ChessBoard *chess_board);
 
+/*
 struct ChessBoard initCastlingTestChessBoard(void);
 
 struct ChessBoard initEnPassantTestChessBoard(void);
@@ -92,12 +110,13 @@ struct ChessBoard initCheckTestChessBoard(void);
 struct ChessBoard initPawnCheckTestChessBoard(void);
 
 struct ChessBoard initMaterialDrawTestChessBoard(void);
+*/
 
-struct PieceList getWhitePieces(struct ChessBoard board);
+struct PieceList getWhitePieces(struct ChessBoard *board);
 
-struct PieceList getBlackPieces(struct ChessBoard board);
+struct PieceList getBlackPieces(struct ChessBoard *board);
 
-char getPieceAtCoordinate(struct ChessBoard board, struct BoardCoordinate coordinate);
+char getPieceAtCoordinate(struct ChessBoard *board, struct BoardCoordinate coordinate);
 
 char convertColumnToCoordinate(char column);
 
@@ -111,13 +130,13 @@ char isSpaceWhite(struct BoardCoordinate coordinate);
 
 char isSpaceWhiteXY(char x, char y);
 
-char isPieceWhite(struct ChessBoard board, struct BoardCoordinate coordinate);
+char isPieceWhite(struct ChessBoard *board, struct BoardCoordinate coordinate);
 
-char isPieceWhiteXY(struct ChessBoard board, char x, char y);
+char isPieceWhiteXY(struct ChessBoard *board, char x, char y);
 
-char isPieceAtLocation(struct ChessBoard board, struct BoardCoordinate location);
+char isPieceAtLocation(struct ChessBoard *board, struct BoardCoordinate location);
 
-char isPieceAtXY(struct ChessBoard board, char x, char y);
+char isPieceAtXY(struct ChessBoard *board, char x, char y);
 
 struct BoardCoordinate convertNotationToBoardCoordinate(char position[2]);
 

@@ -14,7 +14,7 @@ int cursor_xy[2] = {0, 0};
 
 //int strlen(const char * str);
 
-void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour)
+void LCD_DrawTile(int x, int y, const unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour)
 {
 	int i, j, k;
 	unsigned short buffer[576];
@@ -121,7 +121,9 @@ void LCD_DrawBoard(char board[8][8])
 			}
 
 			DrawCursor(cursor_xy[0],cursor_xy[1]);
-			if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
+			if (board_highlight[i] & (0x80 >> 7-j)) {
+				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_CYAN);
+			}
 		}
 	}
 

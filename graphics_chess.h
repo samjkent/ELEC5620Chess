@@ -5,6 +5,7 @@
 #define COLS_24_24 3
 #define TILE 24
 
+/*
 enum chess_pieces {
 	BLANK,
 	PAW_W,
@@ -21,6 +22,7 @@ enum chess_pieces {
 	KIN_B,
 	ERROR
 };
+*/
 
 #define BLANK  '.'
 #define PAW_W  'P'
@@ -51,7 +53,7 @@ enum chess_pieces {
 };*/
 
 
-void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
+void LCD_DrawTile(int x, int y, const unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
 void LCD_DrawBoard(char board[8][8]);
 
 void LCD_PutChar(int x, int y, unsigned char ch, unsigned short bg_colour, unsigned short fg_colour);
@@ -65,7 +67,7 @@ void DrawCursor(int x, int y);
 
 static unsigned char graphics_blank[ROWS_24_24][COLS_24_24] = {0};
 
-static unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -93,7 +95,7 @@ static unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_knight[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_knight[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -121,7 +123,7 @@ static unsigned char graphics_knight[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_rook[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_rook[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -149,7 +151,7 @@ static unsigned char graphics_rook[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_bishop[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_bishop[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -177,7 +179,7 @@ static unsigned char graphics_bishop[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_queen[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_queen[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -205,7 +207,7 @@ static unsigned char graphics_queen[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_king[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_king[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},

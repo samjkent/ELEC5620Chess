@@ -6,14 +6,12 @@
 C_SRCS += \
 ../ChessLogic/ChessBoard.c \
 ../ChessLogic/ChessInput.c \
-../ChessLogic/ChessMoves.c \
-../ChessLogic/PieceMoves.c 
+../ChessLogic/ChessMoves.c 
 
 OBJS += \
 ./ChessLogic/ChessBoard.o \
 ./ChessLogic/ChessInput.o \
-./ChessLogic/ChessMoves.o \
-./ChessLogic/PieceMoves.o 
+./ChessLogic/ChessMoves.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

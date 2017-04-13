@@ -1,9 +1,12 @@
-#include "PieceMoves.h"
-#include "ChessBoard.h"
+#ifndef CHESSINPUT_H
+#define CHESSINPUT_H
+
 #include "ChessMoves.h"
 
-struct MoveCoordinateList inputMoveStart(struct ChessBoard board, struct BoardCoordinate start);
+void inputMoveStart(struct ChessBoard *board, struct BoardCoordinate start, struct MoveCoordinateList *end_move_list);
 
-struct ChessBoard inputEndMove(struct ChessBoard board, struct BoardCoordinate start, struct BoardCoordinate end);
+void inputEndMove(struct ChessBoard *board, struct BoardCoordinate start, struct BoardCoordinate end);
 
-struct ChessBoard inputPawnPromotion(struct ChessBoard board, int input);
+void inputPawnPromotion(struct ChessBoard *board, int input);
+
+#endif
