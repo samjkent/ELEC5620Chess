@@ -6,7 +6,6 @@
 #include "font8x8_basic.h"
 #include "stdio.h"
 #include "string.h"
-#include "drivers/vga_drv.h"
 #include "ChessLogic/PieceMoves.h"
 #include "ChessLogic/ChessBoard.h"
 
@@ -60,11 +59,6 @@ unsigned char* time_str;
 int game_begin = 1;
 int menu_begin = 1;
 
-// IR Test
-void send_ir_byte(char);
-
-//Serial comms test
-void send_data(int data);
 struct ChessBoard chess_board;
 
 int main()
@@ -169,11 +163,6 @@ void display_game(void){
 
 		// Clear game_begin flag
 		game_begin = 0;
-
-		send_data(0xF0F0);
-
-		//send_ir_byte(0x00);
-		//send_ir_byte(0x44);
 	}
 
 	// UPDATE

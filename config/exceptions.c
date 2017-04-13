@@ -18,10 +18,7 @@
 
 // Declare external Interrupt Service Routines (ISR)
 void kbd_interrupt (void);
-void read_ir_byte(void);
-void bit_timeout(void);
-void read_timeout(void);
-void read_data(void);
+
 
 __IRQ __cs3_isr_irq (void)
 {
@@ -39,25 +36,7 @@ __IRQ __cs3_isr_irq (void)
 		// Do nothing
 		int_ID = 210;
 	}
-	//else if(int_ID == HPS_GPIO0_IRQ)
-	//{
-	//	read_byte();
-	//}
-//	else if(int_ID == IrDA_IRQ)
-//	{
-//		read_ir_byte();
-//	}
-	else if (int_ID  == HPS_TIMER0_IRQ)
-	{
-		bit_timeout();
-	}
-	else if (int_ID  == HPS_TIMER1_IRQ)
-	{
-		read_timeout();
-	}
-	else if(int_ID == JP1_IRQ){
-		read_data();
-	} else
+	else
 		// if unexpected, then stay here
 		while (1);
 
