@@ -25,7 +25,6 @@ volatile int * PS2_Control = (int *) 0xFF200104;
 #define KEY_ENTER 0x5A
 #define KEY_ESC 0x76
 
-void key_IRQ_set(int state);
-void key_IRQ_toggle(void);
+void key_IRQ_set(unsigned int state);
 
 #endif

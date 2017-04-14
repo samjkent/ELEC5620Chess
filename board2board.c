@@ -102,6 +102,7 @@ void bit_timeout(void){
 		*HPS_TIMER0_CONTROL &= ~0x1; //stop timer
 		*JP1_DATA = 0x1 << TX_PIN;
 		*JP1_IRQ_MASK |= 0x2;
+		key_IRQ_set(0);
 	}
 
 
@@ -158,6 +159,8 @@ void read_timeout(){
 		start_coordinate.y 	= (rx_data & 0x0F00) >> 8;
 		end_coordinate.x 	= (rx_data & 0x00F0) >> 4;
 		end_coordinate.y 	= (rx_data & 0x000F) >> 0;
+
+		key_IRQ_set(1);
 
 		input_mode = 4; // OPP_P_MODE
 		//*JP1_IRQ_MASK |= 0x2;

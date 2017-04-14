@@ -96,8 +96,7 @@ struct ChessBoard chess_board;
 int move_data;
 
 // Keys
-void key_IRQ_set(int state);
-void key_IRQ_toggle(void);
+void key_IRQ_set(unsigned int state);
 
 int main() {
 
@@ -218,6 +217,7 @@ void display_game(void) {
 		if (game_mode == 2)
 		{
 			*JP1_IRQ_MASK |= 0x2;
+			key_IRQ_set(0);
 		}
 
 //		// Disable keyboard if P2
@@ -291,7 +291,6 @@ void display_game(void) {
 		break;
 	case OPP_P_MOVE:
 			inputEndMove(&chess_board, start_coordinate, end_coordinate);
-			key_IRQ_toggle();
 			move_made = 1;
 			break;
 	default:
