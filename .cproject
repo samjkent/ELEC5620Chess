@@ -30,7 +30,7 @@
 							<tool id="com.arm.tool.c.linker.1983801727" name="ARM Linker" superClass="com.arm.tool.c.linker">
 								<option id="com.arm.tool.c.linker.option.entry.750945834" name="Image entry point (--entry)" superClass="com.arm.tool.c.linker.option.entry" value="__main" valueType="string"/>
 								<option id="com.arm.tool.c.linker.option.cpu.227221964" name="Target CPU (--cpu)" superClass="com.arm.tool.c.linker.option.cpu" value="Cortex-A9.no_neon.no_vfp" valueType="string"/>
-								<option id="com.arm.tool.c.linker.option.scatter.1182835179" name="Scatter file (--scatter)" superClass="com.arm.tool.c.linker.option.scatter" value="M:\DS-5_Workspace\ELEC5620Chess-main-dev\config\scatter.scat" valueType="string"/>
+								<option id="com.arm.tool.c.linker.option.scatter.1182835179" name="Scatter file (--scatter)" superClass="com.arm.tool.c.linker.option.scatter" value="C:\Users\Calum\Documents\DS-5_Workspace\ELEC5620Chess\config\scatterSD.scat" valueType="string"/>
 							</tool>
 							<tool id="com.arm.tool.librarian.1820119739" name="ARM Librarian" superClass="com.arm.tool.librarian"/>
 						</toolChain>

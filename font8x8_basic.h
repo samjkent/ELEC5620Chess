@@ -1,5 +1,5 @@
-#ifndef FONT_8X8_BASIC_
-#define FONT_8X8_BASIC_
+#ifndef Font_8x8
+#define Font_8x8
 
 /** 
  * 8x8 monochrome bitmap fonts for rendering
@@ -23,7 +23,7 @@
 
 // Constant: font8x8_basic
 // Contains an 8x8 font map for unicode points U+0000 - U+007F (basic latin)
-static char font8x8_basic[128][8] = {
+static const char font8x8_basic[128][8] = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0000 (nul)
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0001
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0002

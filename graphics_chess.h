@@ -5,6 +5,7 @@
 #define COLS_24_24 3
 #define TILE 24
 
+/*
 enum chess_pieces {
 	BLANK,
 	PAW_W,
@@ -22,22 +23,25 @@ enum chess_pieces {
 	ERROR
 };
 
-#define BLANK  '.'
-#define PAW_W  '!'
-#define KNI_W  'P'
-#define BIS_W  'N'
-#define ROO_W  'B'
-#define QUE_W  'R'
-#define KIN_W  'Q'
-#define PAW_B  'K'
-#define KNI_B  'p'
-#define BIS_B  'n'
-#define ROO_B  'b'
-#define QUE_B  'r'
-#define KIN_B  'q'
-#define ERROR  'k'
+*/
 
-extern char board[8][8];
+#define BLANK  '.'
+#define PAW_W  'P'
+#define KNI_W  'N'
+#define BIS_W  'B'
+#define ROO_W  'R'
+#define QUE_W  'Q'
+#define KIN_W  'K'
+#define PAW_B  'p'
+#define KNI_B  'n'
+#define BIS_B  'b'
+#define ROO_B  'r'
+#define QUE_B  'q'
+#define KIN_B  'k'
+#define ERROR  '!'
+
+//extern char board[8][8];
+
 /*=
 {
 	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
@@ -51,7 +55,8 @@ extern char board[8][8];
 };*/
 
 
-void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
+
+void LCD_DrawTile(int x, int y, const unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
 void LCD_DrawBoard(char board[8][8]);
 
 void LCD_PutChar(int x, int y, unsigned char ch, unsigned short bg_colour, unsigned short fg_colour);
@@ -63,9 +68,9 @@ void DrawCursor(int x, int y);
 
 
 
-static unsigned char graphics_blank[ROWS_24_24][COLS_24_24] = {0};
+static const unsigned char graphics_blank[ROWS_24_24][COLS_24_24] = {0};
 
-static unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -93,7 +98,7 @@ static unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_knight[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_knight[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -121,7 +126,7 @@ static unsigned char graphics_knight[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_rook[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_rook[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -149,7 +154,7 @@ static unsigned char graphics_rook[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_bishop[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_bishop[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -177,7 +182,7 @@ static unsigned char graphics_bishop[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_queen[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_queen[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},
@@ -205,7 +210,7 @@ static unsigned char graphics_queen[ROWS_24_24][COLS_24_24] =
 	{0x00, 0x00, 0x00}
 };
 
-static unsigned char graphics_king[ROWS_24_24][COLS_24_24] =
+static const unsigned char graphics_king[ROWS_24_24][COLS_24_24] =
 {
 	{0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00},

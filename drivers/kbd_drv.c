@@ -17,21 +17,35 @@
  */
 
 #include "kbd_drv.h"
+#include "../graphics_chess.h"
 
 void board_move(int x);
 
 extern int cursor_xy[2];
+extern int cursor_menu;
+extern int mode;
+
+extern int input_mode;
+
 extern char board_highlight[8];
+int refresh_display = 0;
 volatile int break_code = 0;
+
+extern int menu_begin;
+extern int game_begin;
+
+extern int enter_pressed;
 
 void board_move(int direction) {
 	// Update cursor position
 	switch(direction){
 		case 0:
 			if(cursor_xy[1] != 0) cursor_xy[1]--;
+			if(cursor_menu != 0) cursor_menu--;
 			break;
 		case 1:
 			if(cursor_xy[1] < 7) cursor_xy[1]++;
+			if(cursor_menu != 3) cursor_menu++;
 			break;
 		case 2:
 			if(cursor_xy[0] != 0) cursor_xy[0]--;
@@ -40,6 +54,10 @@ void board_move(int direction) {
 			if(cursor_xy[0] < 7) cursor_xy[0]++;
 			break;
 	}
+
+	// Update board
+	// LCD_DrawBoard(board);
+
 }
 
 /**
@@ -61,9 +79,34 @@ void board_deselect(void){
  *  Highlight selected square
  */
 void board_select(void){
-	board_deselect();
-	// Copy current xy position to selected position
-	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
+	if(mode == 0){
+		// Set mode
+		mode = cursor_menu + 1;
+
+		// Reset cursors
+		cursor_xy[0] = 0;
+		cursor_xy[1] = 0;
+		cursor_menu  = 0;
+
+		// Reset game
+		game_begin = 1;
+
+	}
+	else if (mode == 1)
+	{
+		enter_pressed = 1;
+
+		if (input_mode == 0)
+		{
+			input_mode = 1;
+		}
+		board_deselect();
+		// Copy current xy position to selected position
+		// Do not update highlight if input_mode == INPUT_END
+		if (input_mode != 2) {
+			board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
+		}
+	}
 }
 
 /**
@@ -118,10 +161,19 @@ void kbd_interrupt(void){
 			break;
 		case KEY_ESC:
 			board_deselect();
+			break;
+		case KEY_Q:
+			//Quit
+			mode = 0;
+			// Reset menu
+			menu_begin = 1;
+			break;
 		default:
 			// Do nothing
 			break;
 	}
 
+	// Update display flag
+	refresh_display = 1;
 
 }
