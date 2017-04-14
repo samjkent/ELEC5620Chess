@@ -50,7 +50,7 @@ void display_game(void);
 
 // Refresh when something changes
 extern int refresh_display;
-int mode = 1; // Init to menu
+int mode = 0; // Init to menu
 int cursor_menu;
 
 // Menu
@@ -159,13 +159,13 @@ void display_menu(void) {
 		sprintf(menu_str, "DE1-SoC Chess");
 		LCD_PutStr(20, 20, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "1P vs AI");
+		sprintf(menu_str, "Local Game");
 		LCD_PutStr(20, 30, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "2P - Local");
+		sprintf(menu_str, "Serial: Host");
 		LCD_PutStr(20, 40, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "2P - Serial");
+		sprintf(menu_str, "Serial: Guest");
 		LCD_PutStr(20, 50, menu_str, LCD_BLACK, LCD_WHITE);
 
 		sprintf(menu_str, "Highscores");
