@@ -15,6 +15,7 @@ struct time {
 };
 
 struct time time1 = { 0, 0, 0 };
+struct time time2 = { 0, 0, 0 };
 //struct time time2 = {0,0,0);
 
 /*
@@ -37,10 +38,11 @@ extern char last_move_highlight[8];
 
 void configure_interrupts(void);
 
-struct time tick(struct time time);
-struct time tock(struct time time);
+void tick(struct time *time);
+void tock(struct time *time);
 
 void decrease_time1(void);
+void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board);
 
 // Display Updates
 void display_menu(void);
@@ -57,7 +59,13 @@ unsigned char* menu_str;
 int menu_begin = 1;
 
 // Game
-unsigned char* time_str;
+unsigned char* time1_str;
+unsigned char* time2_str;
+unsigned char* turn_str;
+
+unsigned char* endgame_str_1;
+unsigned char* endgame_str_2;
+
 #define GAME 1
 int game_begin = 1;
 
@@ -174,7 +182,10 @@ void display_game(void) {
 	if (game_begin) {
 		// Initialise chess board
 		initChessBoard(&chess_board);
-
+		for (i = 0; i < 8; i++)
+		{
+			last_move_highlight[i] = 0;
+		}
 		// Clear LCD
 		LCD_Clear(LCD_BLACK);
 		vga_draw_test();
@@ -183,6 +194,9 @@ void display_game(void) {
 		time1.hours = 0;
 		time1.minutes = 5; // 5 minute countdown
 		time1.seconds = 0;
+		time2.hours = 0;
+		time2.minutes = 5; // 5 minute countdown
+		time2.seconds = 0;
 
 		// Clear game_begin flag
 		game_begin = 0;
@@ -263,71 +277,133 @@ void display_game(void) {
 	// DRAW
 	// Refresh the display only when something changes
 	if (refresh_display) {
-		sprintf(time_str, "%02d:%02d:%02d", time1.hours, time1.minutes,
-				time1.seconds);
-		LCD_PutStr(1, 1, time_str, LCD_WHITE, LCD_BLACK);
+		sprintf(time1_str, "%02d:%02d:%02d", time1.hours, time1.minutes, time1.seconds);
+		LCD_PutStr(1, 1, time1_str, LCD_WHITE, LCD_BLACK);
+		sprintf(time2_str, "%02d:%02d:%02d", time2.hours, time2.minutes, time2.seconds);
+		LCD_PutStr((LCD_WIDTH - 1) - (strlen(time2_str)*8), 1, time2_str, LCD_WHITE, LCD_BLACK);
+
+		if (chess_board.white_turn) { sprintf(turn_str,"White to move"); }
+		else { sprintf(turn_str,"Black to move"); }
+		LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_WHITE,LCD_BLACK);
+
+		if (chess_board.end_game)
+		{
+			generate_end_message(endgame_str_1, endgame_str_2, &chess_board);
+			sprintf(turn_str,"             ");
+			LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_WHITE,LCD_BLACK); //clear turn state message
+			LCD_PutStr((240/2) - ((strlen(endgame_str_1)/2) * 8),232,endgame_str_1,LCD_WHITE,LCD_BLACK);
+			LCD_PutStr((240/2) - ((strlen(endgame_str_2)/2) * 8),240,endgame_str_2,LCD_WHITE,LCD_BLACK);
+		}
+
 		LCD_DrawBoard(chess_board.board);
 		refresh_display = 0;
 	}
 }
 
-struct time tick(struct time time) {
-	time.seconds++;
-	if (time.seconds > 59) {
-		time.seconds = 0;
-		time.minutes++;
+void tick(struct time *time) {
+	time->seconds++;
+	if (time->seconds > 59) {
+		time->seconds = 0;
+		time->minutes++;
 	}
-	if (time.minutes > 59) {
-		time.minutes = 0;
-		time.hours++;
+	if (time->minutes > 59) {
+		time->minutes = 0;
+		time->hours++;
 	}
-	if (time.hours > 23) {
-		time.hours = 0;
+	if (time->hours > 23) {
+		time->hours = 0;
 	}
 
 	ResetWDT();
 
-	return time;
 }
 
-struct time tock(struct time time) {
-	time.seconds--;
-	if (time.seconds > 59) {
-		time.seconds = 59;
-		time.minutes--;
+void tock(struct time *time) {
+	time->seconds--;
+	if (time->seconds > 59) {
+		time->seconds = 59;
+		time->minutes--;
 	}
-	if (time.minutes > 59) {
-		time.minutes = 59;
-		time.hours--;
+	if (time->minutes > 59) {
+		time->minutes = 59;
+		time->hours--;
 	}
-	if (time.hours > 23) {
-		time.hours = 23;
+	if (time->hours > 23) {
+		time->hours = 23;
 	}
 
 	ResetWDT();
-
-	return time;
 }
 
 void decrease_time1(void) {
 	// Clear interrupt
 	*(unsigned int *) 0xFFFEC60C = 0x1;
 
-	time1.seconds--;
-	if (time1.seconds > 59) {
-		time1.seconds = 59;
-		time1.minutes--;
+	if (chess_board.white_turn == 1) //update white timer if white to move
+	{
+		tock(&time1);
 	}
-	if (time1.minutes > 59) {
-		time1.minutes = 59;
-		time1.hours--;
-	}
-	if (time1.hours > 23) {
-		time1.hours = 23;
+	else if (chess_board.white_turn == 0) //update black timer if black to move
+	{
+		tock(&time2);
 	}
 
 	refresh_display = 1;
 	ResetWDT();
 
+}
+
+void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board)
+{
+	if (board->end_game & 0x01)
+	{
+		sprintf(str_1,"Checkmate!");
+		sprintf(str_2,"Black wins!");
+	}
+	else if (board->end_game & 0x02)
+	{
+		sprintf(str_1,"Checkmate!");
+		sprintf(str_2,"White wins!");
+	}
+	else if (board->end_game & 0x04)
+	{
+		sprintf(str_1,"Stalemate!");
+		sprintf(str_2,"Game is drawn!");
+	}
+	else if (board->end_game & 0x08)
+	{
+		sprintf(str_1,"Insufficient mating material!");
+		sprintf(str_2,"Game is drawn!");
+	}
+	else if (board->end_game & 0x10)
+	{
+		sprintf(str_1,"50 move rule!");
+		sprintf(str_2,"Game is drawn!");
+	}
+	else if (board->end_game & 0x20)
+	{
+		sprintf(str_1,"Threefold Repetition!");
+		sprintf(str_2,"Game is drawn!");
+	}
+	else
+	{
+		if (board->king_info & 0x08)
+		{
+			sprintf(str_1,"White in check");
+		}
+		else if (board->king_info & 0x80)
+		{
+			sprintf(str_1,"Black in check");
+		}
+
+		if (board->white_turn)
+		{
+			sprintf(str_2,"White to move");
+		}
+		else
+		{
+			sprintf(str_2,"Black to move");
+		}
+	}
 }
 

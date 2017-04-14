@@ -122,11 +122,11 @@ void LCD_DrawBoard(char board[8][8])
 			}
 
 			DrawCursor(cursor_xy[0],cursor_xy[1]);
-			if (board_highlight[i] & (0x80 >> 7-j)) {
-				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_CYAN);
-			}
 			if (last_move_highlight[i] & (0x80 >> 7-j)) {
 				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_BLUE);
+			}
+			if (board_highlight[i] & (0x80 >> 7-j)) {
+				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_CYAN);
 			}
 		}
 	}
