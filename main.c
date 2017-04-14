@@ -214,10 +214,10 @@ void display_game(void) {
 		// Clear game_begin flag
 		game_begin = 0;
 
-		// Disable keyboard if P2
-		if(game_mode == 2 && chess_board.white_turn == 1) {
-			key_IRQ_set(0);
-		}
+//		// Disable keyboard if P2
+//		if(game_mode == 2 && chess_board.white_turn == 1) {
+//			key_IRQ_set(0);
+//		}
 
 		//send_ir_byte(0x00);
 		//send_ir_byte(0x44);
@@ -260,7 +260,7 @@ void display_game(void) {
 				if (chess_board.promotion & 0x88) {
 					input_mode = INPUT_PROMOTION;
 				} else {
-					key_IRQ_toggle();
+//					key_IRQ_toggle();
 
 					move_data = 0;
 					move_data += ((start_coordinate.x) & 0xF) << 12;

@@ -45,6 +45,7 @@ extern struct BoardCoordinate start_coordinate;
 extern struct BoardCoordinate end_coordinate;
 
 
+
 void JP1_init(void)
 {
 	*JP1_DATA_DIR |= 0x1;
