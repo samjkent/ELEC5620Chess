@@ -30,13 +30,13 @@ void LCD_DrawTile(int x, int y, const unsigned char graphics_tile[ROWS_24_24][CO
 					buffer[(j*TILE)+((i*8)+k)] = fg_colour;
 					//LCD_WR_DATA(fg_colour);
 					// Switch x and y
-					vga_write_pixel(y*TILE+(j),x*TILE+((i*8)+k),fg_colour, 1);
+					vga_write_pixel(216-y*TILE+(j),x*TILE+((i*8)+k),fg_colour, 1);
 				}
 				else
 				{
 					buffer[(j*TILE)+((i*8)+k)] = bg_colour;
 					//LCD_WR_DATA(bg_colour);
-					vga_write_pixel(y*TILE+(j),x*TILE+((i*8)+k),bg_colour, 1);
+					vga_write_pixel(216-y*TILE+(j),x*TILE+((i*8)+k),bg_colour, 1);
 				}
 			}
 		}

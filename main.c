@@ -216,7 +216,7 @@ void display_game(void){
 			{
 				for (i = 0; i < end_move_list.move_count; i++)
 				{
-					board_highlight[end_move_list.moves[i].x] = 0x1 << end_move_list.moves[i].y;
+					board_highlight[end_move_list.moves[i].x] |= 0x1 << end_move_list.moves[i].y;
 				}
 
 				input_mode = INPUT_END;

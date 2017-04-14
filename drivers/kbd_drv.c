@@ -96,10 +96,10 @@ void board_select(void){
 		{
 			input_mode = 1;
 		}
+		board_deselect();
+		// Copy current xy position to selected position
+		board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
 	}
-	board_deselect();
-	// Copy current xy position to selected position
-	board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
 }
 
 /**
