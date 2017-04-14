@@ -196,11 +196,6 @@ void kbd_interrupt(void) {
 
 }
 
-void key_IRQ_set(int state){
-	*PS2_Control |= state << 0;
-}
-
-void key_IRQ_toggle(void){
-	*PS2_Control ^= 1 << 0;
-
+void key_IRQ_set(unsigned int state){
+	*PS2_Control ^= (-state ^ *PS2_Control) & (1 << 0); // nth bit to x
 }

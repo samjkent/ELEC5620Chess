@@ -42,7 +42,7 @@ void tick(struct time *time);
 void tock(struct time *time);
 
 void decrease_time1(void);
-void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, int bg_colour, int fg_colour);
+void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour);
 
 // Display Updates
 void display_menu(void);
@@ -50,7 +50,7 @@ void display_game(void);
 
 // Refresh when something changes
 extern int refresh_display;
-int mode = 1; // Init to menu
+int mode = 0; // Init to menu
 int cursor_menu;
 
 // Menu
@@ -63,8 +63,8 @@ unsigned char* time1_str;
 unsigned char* time2_str;
 unsigned char* turn_str;
 
-unsigned char* endgame_str_1 = "";
-unsigned char* endgame_str_2 = "";
+unsigned char* endgame_str_1;
+unsigned char* endgame_str_2;
 
 #define GAME 1
 int game_begin = 1;
@@ -96,8 +96,7 @@ struct ChessBoard chess_board;
 int move_data;
 
 // Keys
-void key_IRQ_set(int state);
-void key_IRQ_toggle(void);
+void key_IRQ_set(unsigned int state);
 
 int main() {
 
@@ -159,13 +158,13 @@ void display_menu(void) {
 		sprintf(menu_str, "DE1-SoC Chess");
 		LCD_PutStr(20, 20, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "1P vs AI");
+		sprintf(menu_str, "Local Game");
 		LCD_PutStr(20, 30, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "2P - Local");
+		sprintf(menu_str, "Serial: Host");
 		LCD_PutStr(20, 40, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "2P - Serial");
+		sprintf(menu_str, "Serial: Guest");
 		LCD_PutStr(20, 50, menu_str, LCD_BLACK, LCD_WHITE);
 
 		sprintf(menu_str, "Highscores");
@@ -186,6 +185,7 @@ void display_menu(void) {
 
 void display_game(void) {
 	int i;
+	volatile unsigned int 	*JP1_IRQ_MASK	= (unsigned int *) 0xFF200068;
 	//unsigned char* temp_str;
 
 	// INIT
@@ -214,10 +214,16 @@ void display_game(void) {
 		// Clear game_begin flag
 		game_begin = 0;
 
-		// Disable keyboard if P2
-		if(game_mode == 2 && chess_board.white_turn == 1) {
+		if (game_mode == 2)
+		{
+			*JP1_IRQ_MASK |= 0x2;
 			key_IRQ_set(0);
 		}
+
+//		// Disable keyboard if P2
+//		if(game_mode == 2 && chess_board.white_turn == 1) {
+//			key_IRQ_set(0);
+//		}
 
 		//send_ir_byte(0x00);
 		//send_ir_byte(0x44);
@@ -260,15 +266,17 @@ void display_game(void) {
 				if (chess_board.promotion & 0x88) {
 					input_mode = INPUT_PROMOTION;
 				} else {
-					key_IRQ_toggle();
+					if(game_mode != 0){ // 2P send updates
+						//key_IRQ_toggle();
 
-					move_data = 0;
-					move_data += ((start_coordinate.x) & 0xF) << 12;
-					move_data += ((start_coordinate.y) & 0xF) << 8;
-					move_data += ((end_coordinate.x	 ) & 0xF) << 4;
-					move_data += ((end_coordinate.y	 ) & 0xF) << 0;
+						move_data = 0;
+						move_data += ((start_coordinate.x) & 0xF) << 12;
+						move_data += ((start_coordinate.y) & 0xF) << 8;
+						move_data += ((end_coordinate.x	 ) & 0xF) << 4;
+						move_data += ((end_coordinate.y	 ) & 0xF) << 0;
 
-					send_data(move_data);
+						send_data(move_data);
+					}
 					move_made = 1;
 				}
 			}
@@ -283,7 +291,6 @@ void display_game(void) {
 		break;
 	case OPP_P_MOVE:
 			inputEndMove(&chess_board, start_coordinate, end_coordinate);
-			key_IRQ_toggle();
 			move_made = 1;
 			break;
 	default:
@@ -306,6 +313,8 @@ void display_game(void) {
 		last_move_highlight[end_coordinate.x] 	|= 0x1 << end_coordinate.y;
 		input_mode = NO_INPUT;
 		endGameCheck(&chess_board);
+		refresh_display = 1;
+		//*JP1_IRQ_MASK ^= 0x2; //toggle IRQ each turn
 	}
 
 	// DRAW
@@ -316,17 +325,14 @@ void display_game(void) {
 		sprintf(time2_str, "%02d:%02d:%02d", time2.hours, time2.minutes, time2.seconds);
 		LCD_PutStr((LCD_WIDTH - 1) - (strlen(time2_str)*8), 1, time2_str, LCD_WHITE, LCD_BLACK);
 
-		if (chess_board.white_turn) { sprintf(turn_str,"White to move"); }
-		else { sprintf(turn_str,"Black to move"); }
-		LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_WHITE,LCD_BLACK);
+		//if (chess_board.white_turn) { sprintf(turn_str,"White to move"); }
+		//else { sprintf(turn_str,"Black to move"); }
+		//LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_WHITE,LCD_BLACK);
 
 
-		sprintf(turn_str,"             ");
-		LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_BLACK,LCD_BLACK); //clear turn state message
+		//LCD_PutStr((240/2) - ((strlen("             ")/2) * 8),240,"             ",LCD_BLACK,LCD_BLACK); //clear turn state message
 
-		generate_end_message(endgame_str_1, endgame_str_2, &chess_board,LCD_BLACK,LCD_WHITE);
-		//LCD_PutStr((240/2) - ((strlen(endgame_str_1)/2) * 8),232,endgame_str_1,LCD_WHITE,LCD_BLACK);
-		//LCD_PutStr((240/2) - ((strlen(endgame_str_2)/2) * 8),240,endgame_str_2,LCD_WHITE,LCD_BLACK);
+		generate_end_message(&chess_board,LCD_BLACK,LCD_WHITE);
 
 
 		LCD_DrawBoard(chess_board.board);
@@ -408,8 +414,12 @@ void decrease_time1(void) {
 
 }
 
-void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, int bg_colour, int fg_colour)
+void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour)
 {
+	unsigned short buffer[LCD_WIDTH * 16] = {0};
+	LCD_Window(0, 232, LCD_WIDTH, 16 );
+	LCD_Framebuffer(buffer,LCD_WIDTH*16);
+
 	if (board->end_game & 0x01)
 	{
 		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
@@ -444,10 +454,12 @@ void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, in
 	{
 		if (board->king_info & 0x08)
 		{
+			//LCD_PutStr((240/2) - ((strlen("              ")/2) * 8),240,"              ",LCD_BLACK,LCD_BLACK);
 			LCD_PutStr((240/2) - ((strlen("White in check")/2) * 8),232,"White in check",fg_colour,bg_colour);
 		}
 		else if (board->king_info & 0x80)
 		{
+			//LCD_PutStr((240/2) - ((strlen("              ")/2) * 8),240,"              ",LCD_BLACK,LCD_BLACK);
 			LCD_PutStr((240/2) - ((strlen("Black in check")/2) * 8),232,"Black in check",fg_colour,bg_colour);
 		}
 
@@ -457,7 +469,7 @@ void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, in
 		}
 		else
 		{
-			LCD_PutStr((240/2) - ((strlen("Black to move")/2) * 8),240,"White to move",fg_colour,bg_colour);
+			LCD_PutStr((240/2) - ((strlen("Black to move")/2) * 8),240,"Black to move",fg_colour,bg_colour);
 		}
 	}
 }

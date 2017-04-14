@@ -45,6 +45,7 @@ extern struct BoardCoordinate start_coordinate;
 extern struct BoardCoordinate end_coordinate;
 
 
+
 void JP1_init(void)
 {
 	*JP1_DATA_DIR |= 0x1;
@@ -88,19 +89,20 @@ void send_data(int data)
 
 void bit_timeout(void){
 
-
+	int i;
 	int clear = *HPS_TIMER0_EOI;
 	*JP1_DATA ^= (-((tx_data >> bit_count) & 0x1)^ *JP1_DATA) & (1 << TX_PIN); // set nth bit to x
 	++bit_count;
 
-	if (bit_count < 16)
+	if (bit_count < 17)
 	{
 		hps_start_timer0(BIT_PERIOD);
 	}
-	else
-	{
+	else  {
 		*HPS_TIMER0_CONTROL &= ~0x1; //stop timer
-
+		*JP1_DATA = 0x1 << TX_PIN;
+		*JP1_IRQ_MASK |= 0x2;
+		key_IRQ_set(0);
 	}
 
 
@@ -118,6 +120,22 @@ void read_data(void)
 
 }
 
+int check_valid_packet(int packet){
+	int a0,a1,a2,a3;
+	a0 = (rx_data & 0xF000) >> 12;
+	a1 = (rx_data & 0x0F00) >> 8;
+	a2 = (rx_data & 0x00F0) >> 4;
+	a3 = (rx_data & 0x000F) >> 0;
+
+	if(a0 > 7 || a1 > 7 || a2 > 7 || a3 >7){
+		return 0; // Invalid
+	} else {
+		return 1; // Valid
+	}
+
+
+}
+
 void read_timeout(){
 
 	int clear = *HPS_TIMER1_EOI;
@@ -128,15 +146,24 @@ void read_timeout(){
 		hps_start_timer1(BIT_PERIOD); // Reload
 	} else {
 		rx_data = rx_data >> 1; // Remove start bit
+		*HPS_TIMER1_CONTROL &= ~0x1; //stop timer
+
+		if(!check_valid_packet(rx_data))
+		{
+			*JP1_IRQ_MASK |= 0x2;
+			return;
+		}
+
 		// Set start and end coords
 		start_coordinate.x 	= (rx_data & 0xF000) >> 12;
 		start_coordinate.y 	= (rx_data & 0x0F00) >> 8;
 		end_coordinate.x 	= (rx_data & 0x00F0) >> 4;
 		end_coordinate.y 	= (rx_data & 0x000F) >> 0;
 
+		key_IRQ_set(1);
+
 		input_mode = 4; // OPP_P_MODE
-		*HPS_TIMER1_CONTROL &= ~0x1; //stop timer
-		*JP1_IRQ_MASK |= 0x2;
+		//*JP1_IRQ_MASK |= 0x2;
 	}
 
 }
