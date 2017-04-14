@@ -22,6 +22,7 @@ enum chess_pieces {
 	KIN_B,
 	ERROR
 };
+
 */
 
 #define BLANK  '.'
@@ -40,6 +41,7 @@ enum chess_pieces {
 #define ERROR  '!'
 
 //extern char board[8][8];
+
 /*=
 {
 	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
@@ -51,6 +53,7 @@ enum chess_pieces {
 	{PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W},
 	{ROO_W, KNI_W, BIS_W, QUE_W, KIN_W, BIS_W, KNI_W, ROO_W}
 };*/
+
 
 
 void LCD_DrawTile(int x, int y, const unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour);
