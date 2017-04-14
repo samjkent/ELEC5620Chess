@@ -260,15 +260,17 @@ void display_game(void) {
 				if (chess_board.promotion & 0x88) {
 					input_mode = INPUT_PROMOTION;
 				} else {
-//					key_IRQ_toggle();
+					if(game_mode != 0){ // 2P send updates
+						//key_IRQ_toggle();
 
-					move_data = 0;
-					move_data += ((start_coordinate.x) & 0xF) << 12;
-					move_data += ((start_coordinate.y) & 0xF) << 8;
-					move_data += ((end_coordinate.x	 ) & 0xF) << 4;
-					move_data += ((end_coordinate.y	 ) & 0xF) << 0;
+						move_data = 0;
+						move_data += ((start_coordinate.x) & 0xF) << 12;
+						move_data += ((start_coordinate.y) & 0xF) << 8;
+						move_data += ((end_coordinate.x	 ) & 0xF) << 4;
+						move_data += ((end_coordinate.y	 ) & 0xF) << 0;
 
-					send_data(move_data);
+						send_data(move_data);
+					}
 					move_made = 1;
 				}
 			}
