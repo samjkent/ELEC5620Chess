@@ -49,7 +49,7 @@ extern struct BoardCoordinate end_coordinate;
 void JP1_init(void)
 {
 	*JP1_DATA_DIR |= 0x1;
-	*JP1_IRQ_MASK = 0x2; //Initialise to masked - unmask in 2p serial mode
+	*JP1_IRQ_MASK &= ~0x2; //Initialise to masked - unmask in 2p serial mode
 	*JP1_DATA |= 0x1;
 }
 

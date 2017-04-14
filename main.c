@@ -186,6 +186,7 @@ void display_menu(void) {
 
 void display_game(void) {
 	int i;
+	volatile unsigned int 	*JP1_IRQ_MASK	= (unsigned int *) 0xFF200068;
 	//unsigned char* temp_str;
 
 	// INIT
@@ -213,6 +214,11 @@ void display_game(void) {
 
 		// Clear game_begin flag
 		game_begin = 0;
+
+		if (game_mode == 2)
+		{
+			*JP1_IRQ_MASK |= 0x2;
+		}
 
 //		// Disable keyboard if P2
 //		if(game_mode == 2 && chess_board.white_turn == 1) {
@@ -309,6 +315,7 @@ void display_game(void) {
 		input_mode = NO_INPUT;
 		endGameCheck(&chess_board);
 		refresh_display = 1;
+		*JP1_IRQ_MASK ^= 0x2; //toggle IRQ each turn
 	}
 
 	// DRAW
