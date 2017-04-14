@@ -507,6 +507,8 @@ char isMoveInMoveList(struct MoveCoordinateList moveList, struct BoardCoordinate
 
 void purgeIllegalMoves(struct ChessBoard *board, struct BoardCoordinate start, struct MoveCoordinateList *moveList)
 {
+	int i;
+	int j;
 	int n;
 	int index = 0;
 	int king_bitshift = 0;
@@ -524,7 +526,28 @@ void purgeIllegalMoves(struct ChessBoard *board, struct BoardCoordinate start, s
 
 	for (n = 0; n < moveList->move_count; n++)
 	{
-		temp_board = *board;
+		// Set temp_board to equal board
+		//temp_board.board = board->board;
+		for (i = 0; i < 8; i++){
+			for (j = 0; j < 8; j++)
+			{
+				temp_board.board[i][j] = board->board[i][j];
+			}
+		}
+		temp_board.en_passant = board->en_passant;
+		temp_board.promotion = board->promotion;
+		temp_board.white_turn = board->white_turn;
+		temp_board.white_piece_count = board->white_piece_count;
+		temp_board.black_piece_count = board->black_piece_count;
+		temp_board.king_info = board->king_info;
+		temp_board.end_game = board->end_game;
+		temp_board.fifty_move_counter = board->fifty_move_counter;
+
+
+
+
+
+		//memcpy (&temp_board, *board, sizeof (struct ChessBoard));
 
 		// Set end coordinate of move
 		test_move.end = moveList->moves[n];

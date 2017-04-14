@@ -2,7 +2,9 @@
 #define CHESSMOVES_H
 
 #include "ChessBoard.h"
-//#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
 
 /*
 // Doubly linked list used to store all possible attacking moves of a given colour
