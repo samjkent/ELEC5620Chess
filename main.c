@@ -42,7 +42,7 @@ void tick(struct time *time);
 void tock(struct time *time);
 
 void decrease_time1(void);
-void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board);
+void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, int bg_colour, int fg_colour);
 
 // Display Updates
 void display_menu(void);
@@ -63,8 +63,8 @@ unsigned char* time1_str;
 unsigned char* time2_str;
 unsigned char* turn_str;
 
-unsigned char* endgame_str_1;
-unsigned char* endgame_str_2;
+unsigned char* endgame_str_1 = "";
+unsigned char* endgame_str_2 = "";
 
 #define GAME 1
 int game_begin = 1;
@@ -295,14 +295,14 @@ void display_game(void) {
 		else { sprintf(turn_str,"Black to move"); }
 		LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_WHITE,LCD_BLACK);
 
-		if (chess_board.end_game)
-		{
-			generate_end_message(endgame_str_1, endgame_str_2, &chess_board);
-			sprintf(turn_str,"             ");
-			LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_WHITE,LCD_BLACK); //clear turn state message
-			LCD_PutStr((240/2) - ((strlen(endgame_str_1)/2) * 8),232,endgame_str_1,LCD_WHITE,LCD_BLACK);
-			LCD_PutStr((240/2) - ((strlen(endgame_str_2)/2) * 8),240,endgame_str_2,LCD_WHITE,LCD_BLACK);
-		}
+
+		sprintf(turn_str,"             ");
+		LCD_PutStr((240/2) - ((strlen(turn_str)/2) * 8),240,turn_str,LCD_BLACK,LCD_BLACK); //clear turn state message
+
+		generate_end_message(endgame_str_1, endgame_str_2, &chess_board,LCD_BLACK,LCD_WHITE);
+		//LCD_PutStr((240/2) - ((strlen(endgame_str_1)/2) * 8),232,endgame_str_1,LCD_WHITE,LCD_BLACK);
+		//LCD_PutStr((240/2) - ((strlen(endgame_str_2)/2) * 8),240,endgame_str_2,LCD_WHITE,LCD_BLACK);
+
 
 		LCD_DrawBoard(chess_board.board);
 		refresh_display = 0;
@@ -383,56 +383,56 @@ void decrease_time1(void) {
 
 }
 
-void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board)
+void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, int bg_colour, int fg_colour)
 {
 	if (board->end_game & 0x01)
 	{
-		sprintf(str_1,"Checkmate!");
-		sprintf(str_2,"Black wins!");
+		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Black wins!")/2) * 8),240,"Black wins!",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x02)
 	{
-		sprintf(str_1,"Checkmate!");
-		sprintf(str_2,"White wins!");
+		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("White wins!")/2) * 8),240,"White wins!",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x04)
 	{
-		sprintf(str_1,"Stalemate!");
-		sprintf(str_2,"Game is drawn!");
+		LCD_PutStr((240/2) - ((strlen("Stalemate!"		)/2) * 8),232,"Stalemate!"		,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Game is drawn!"	)/2) * 8),240,"Game is drawn!"	,fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x08)
 	{
-		sprintf(str_1,"Insufficient mating material!");
-		sprintf(str_2,"Game is drawn!");
+		LCD_PutStr((240/2) - ((strlen("Insufficient mating material!")/2) * 8),232,	"Insufficient mating material!", fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Game is drawn!")/2) * 8),240, "Game is drawn!"	,fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x10)
 	{
-		sprintf(str_1,"50 move rule!");
-		sprintf(str_2,"Game is drawn!");
+		LCD_PutStr((240/2) - ((strlen("50 move rule!"	)/2) * 8),232,"50 move rule!"	,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Game is drawn!"	)/2) * 8),240,"Game is drawn!"	,fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x20)
 	{
-		sprintf(str_1,"Threefold Repetition!");
-		sprintf(str_2,"Game is drawn!");
+		LCD_PutStr((240/2) - ((strlen("Threefold Repetition!")/2) * 8),232,"Threefold Repetition!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Game is drawn!")/2) * 8),240,"Game is drawn!",fg_colour,bg_colour);
 	}
 	else
 	{
 		if (board->king_info & 0x08)
 		{
-			sprintf(str_1,"White in check");
+			LCD_PutStr((240/2) - ((strlen("White in check")/2) * 8),232,"White in check",fg_colour,bg_colour);
 		}
 		else if (board->king_info & 0x80)
 		{
-			sprintf(str_1,"Black in check");
+			LCD_PutStr((240/2) - ((strlen("Black in check")/2) * 8),232,"Black in check",fg_colour,bg_colour);
 		}
 
 		if (board->white_turn)
 		{
-			sprintf(str_2,"White to move");
+			LCD_PutStr((240/2) - ((strlen("White to move")/2) * 8),240,"White to move",fg_colour,bg_colour);
 		}
 		else
 		{
-			sprintf(str_2,"Black to move");
+			LCD_PutStr((240/2) - ((strlen("Black to move")/2) * 8),240,"White to move",fg_colour,bg_colour);
 		}
 	}
 }
