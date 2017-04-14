@@ -42,7 +42,7 @@ void tick(struct time *time);
 void tock(struct time *time);
 
 void decrease_time1(void);
-void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, int bg_colour, int fg_colour);
+void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour);
 
 // Display Updates
 void display_menu(void);
@@ -333,7 +333,7 @@ void display_game(void) {
 
 		//LCD_PutStr((240/2) - ((strlen("             ")/2) * 8),240,"             ",LCD_BLACK,LCD_BLACK); //clear turn state message
 
-		generate_end_message(endgame_str_1, endgame_str_2, &chess_board,LCD_BLACK,LCD_WHITE);
+		generate_end_message(&chess_board,LCD_BLACK,LCD_WHITE);
 
 
 		LCD_DrawBoard(chess_board.board);
@@ -415,7 +415,7 @@ void decrease_time1(void) {
 
 }
 
-void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, int bg_colour, int fg_colour)
+void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour)
 {
 	unsigned short buffer[LCD_WIDTH * 16] = {0};
 	LCD_Window(0, 232, LCD_WIDTH, 16 );
@@ -470,7 +470,7 @@ void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board, in
 		}
 		else
 		{
-			LCD_PutStr((240/2) - ((strlen("Black to move")/2) * 8),240,"White to move",fg_colour,bg_colour);
+			LCD_PutStr((240/2) - ((strlen("Black to move")/2) * 8),240,"Black to move",fg_colour,bg_colour);
 		}
 	}
 }
