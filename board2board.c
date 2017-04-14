@@ -120,6 +120,22 @@ void read_data(void)
 
 }
 
+int check_valid_packet(int packet){
+	int a0,a1,a2,a3;
+	a0 = (rx_data & 0xF000) >> 12;
+	a1 = (rx_data & 0x0F00) >> 8;
+	a2 = (rx_data & 0x00F0) >> 4;
+	a3 = (rx_data & 0x000F) >> 0;
+
+	if(a0 > 7 || a1 > 7 || a2 > 7 || a3 >7){
+		return 0; // Invalid
+	} else {
+		return 1; // Valid
+	}
+
+
+}
+
 void read_timeout(){
 
 	int clear = *HPS_TIMER1_EOI;
@@ -129,8 +145,10 @@ void read_timeout(){
 	if(bit_count < 17){
 		hps_start_timer1(BIT_PERIOD); // Reload
 	} else {
-		if(rx_data == 0xFFFF) return;
 		rx_data = rx_data >> 1; // Remove start bit
+
+		if(!check_valid_packet(rx_data)) return;
+
 		// Set start and end coords
 		start_coordinate.x 	= (rx_data & 0xF000) >> 12;
 		start_coordinate.y 	= (rx_data & 0x0F00) >> 8;
