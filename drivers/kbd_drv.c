@@ -34,6 +34,8 @@ volatile int break_code = 0;
 extern int menu_begin;
 extern int game_begin;
 
+extern int enter_pressed;
+
 void board_move(int direction) {
 	// Update cursor position
 	switch(direction){
@@ -92,6 +94,8 @@ void board_select(void){
 	}
 	else if (mode == 1)
 	{
+		enter_pressed = 1;
+
 		if (input_mode == 0)
 		{
 			input_mode = 1;
