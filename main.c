@@ -5,35 +5,6 @@
 #include "font8x8_basic.h"
 #include "stdio.h"
 #include "string.h"
-<<<<<<< HEAD
-
-struct time
-{
-	unsigned int seconds;
-	unsigned int minutes;
-	unsigned int hours;
-};
-
-struct time time1 = {0,5,0};
-//struct time time2 = {0,0,0);
-
-char board[8][8] =
-{
-	{ROO_B, KNI_B, BIS_B, QUE_B, KIN_B, BIS_B, KNI_B, ROO_B},
-	{PAW_B, PAW_B, PAW_B, PAW_B, PAW_B, PAW_B, PAW_B, PAW_B},
-	{BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK},
-	{BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK},
-	{BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK},
-	{BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK},
-	{PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W, PAW_W},
-	{ROO_W, KNI_W, BIS_W, QUE_W, KIN_W, BIS_W, KNI_W, ROO_W}
-};
-
-void configure_interrupts(void);
-
-struct time tick(struct time time);
-struct time tock(struct time time);
-=======
 #include "drivers/vga_drv.h"
 #include "ChessLogic/ChessInput.h"
 
@@ -69,7 +40,6 @@ void configure_interrupts(void);
 
 void tick(struct time *time);
 void tock(struct time *time);
->>>>>>> thomas-dev
 
 void decrease_time1(void);
 void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board);
