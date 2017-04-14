@@ -102,7 +102,10 @@ void board_select(void){
 		}
 		board_deselect();
 		// Copy current xy position to selected position
-		board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
+		// Do not update highlight if input_mode == INPUT_END
+		if (input_mode != 2) {
+			board_highlight[cursor_xy[0]] = 0x80 >> cursor_xy[1];
+		}
 	}
 }
 

@@ -65,7 +65,7 @@ void DrawCursor(int x, int y);
 
 
 
-static unsigned char graphics_blank[ROWS_24_24][COLS_24_24] = {0};
+static const unsigned char graphics_blank[ROWS_24_24][COLS_24_24] = {0};
 
 static const unsigned char graphics_pawn[ROWS_24_24][COLS_24_24] =
 {

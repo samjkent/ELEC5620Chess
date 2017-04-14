@@ -7,7 +7,8 @@
 #include "string.h"
 #include "drivers/vga_drv.h"
 
-char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+char board_highlight[8]			= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+char last_move_highlight[8]		= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 int cursor_xy[2] = {0, 0};
 
@@ -123,6 +124,9 @@ void LCD_DrawBoard(char board[8][8])
 			DrawCursor(cursor_xy[0],cursor_xy[1]);
 			if (board_highlight[i] & (0x80 >> 7-j)) {
 				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_CYAN);
+			}
+			if (last_move_highlight[i] & (0x80 >> 7-j)) {
+				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_BLUE);
 			}
 		}
 	}

@@ -33,6 +33,7 @@ struct time time1 = { 0, 0, 0 };
 
 extern int cursor_xy[2];
 extern char board_highlight[8];
+extern char last_move_highlight[8];
 
 void configure_interrupts(void);
 
@@ -209,8 +210,7 @@ void display_game(void) {
 
 			if (end_move_list.move_count > 0) {
 				for (i = 0; i < end_move_list.move_count; i++) {
-					board_highlight[end_move_list.moves[i].x] |= 0x1
-							<< end_move_list.moves[i].y;
+					board_highlight[end_move_list.moves[i].x] |= 0x1 << end_move_list.moves[i].y;
 				}
 
 				input_mode = INPUT_END;
@@ -223,8 +223,7 @@ void display_game(void) {
 		if (enter_pressed == 1) {
 			enter_pressed = 0;
 
-			end_coordinate = BoardCoordinateConstructor(cursor_xy[0],
-					7 - cursor_xy[1]);
+			end_coordinate = BoardCoordinateConstructor(cursor_xy[0],7 - cursor_xy[1]);
 			if (isMoveInMoveList(end_move_list, end_coordinate)) {
 				inputEndMove(&chess_board, start_coordinate, end_coordinate);
 
@@ -251,6 +250,12 @@ void display_game(void) {
 
 	if (move_made) {
 		move_made = 0;
+		for (i = 0; i < 8; i++)
+		{
+			last_move_highlight[i] = 0x00;
+		}
+		last_move_highlight[start_coordinate.x] |= 0x1 << start_coordinate.y;
+		last_move_highlight[end_coordinate.x] 	|= 0x1 << end_coordinate.y;
 		input_mode = NO_INPUT;
 		endGameCheck(&chess_board);
 	}
