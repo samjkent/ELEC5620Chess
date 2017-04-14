@@ -315,7 +315,7 @@ void display_game(void) {
 		input_mode = NO_INPUT;
 		endGameCheck(&chess_board);
 		refresh_display = 1;
-		*JP1_IRQ_MASK ^= 0x2; //toggle IRQ each turn
+		//*JP1_IRQ_MASK ^= 0x2; //toggle IRQ each turn
 	}
 
 	// DRAW
