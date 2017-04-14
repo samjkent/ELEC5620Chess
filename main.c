@@ -112,19 +112,6 @@ int main() {
 	// Initialise timer
 	utimer_irq(1000000); // set 1s timer w/ auto reload
 
-<<<<<<< HEAD
-	LCD_DrawBoard(board);
-
-	while (1)
-	{
-		Delay_Ms(1000); //1s delay
-
-		sprintf(time_str,"%02d:%02d:%02d",time1.hours,time1.minutes,time1.seconds);
-
-		LCD_PutStr(1,1,time_str,LCD_WHITE,LCD_BLACK);
-
-		time1 = tock(time1);
-=======
 	while (1) {
 		switch (mode) {
 		case MENU:
@@ -164,7 +151,6 @@ void display_menu(void) {
 
 		sprintf(menu_str, "1P vs AI");
 		LCD_PutStr(20, 30, menu_str, LCD_BLACK, LCD_WHITE);
->>>>>>> thomas-dev
 
 		sprintf(menu_str, "2P - Local");
 		LCD_PutStr(20, 40, menu_str, LCD_BLACK, LCD_WHITE);
@@ -188,26 +174,6 @@ void display_menu(void) {
 	}
 }
 
-<<<<<<< HEAD
-struct time tick(struct time time)
-{
-	time.seconds++;
-	if (time.seconds > 59) { time.seconds = 0; time.minutes++; }
-	if (time.minutes > 59) { time.minutes = 0; time.hours++; }
-	if (time.hours > 23) { time.hours = 0; }
-
-	ResetWDT();
-
-	return time;
-}
-
-struct time tock(struct time time)
-{
-	time.seconds--;
-	if (time.seconds > 59) { time.seconds = 59; time.minutes--; }
-	if (time.minutes > 59) { time.minutes = 59; time.hours--; }
-	if (time.hours > 23) { time.hours = 23; }
-=======
 void display_game(void) {
 	int i;
 
@@ -315,7 +281,6 @@ void display_game(void) {
 		LCD_PutStr(1, 1, time1_str, LCD_WHITE, LCD_BLACK);
 		sprintf(time2_str, "%02d:%02d:%02d", time2.hours, time2.minutes, time2.seconds);
 		LCD_PutStr((LCD_WIDTH - 1) - (strlen(time2_str)*8), 1, time2_str, LCD_WHITE, LCD_BLACK);
->>>>>>> thomas-dev
 
 		if (chess_board.white_turn) { sprintf(turn_str,"White to move"); }
 		else { sprintf(turn_str,"Black to move"); }
@@ -386,10 +351,6 @@ void decrease_time1(void) {
 	refresh_display = 1;
 	ResetWDT();
 
-<<<<<<< HEAD
-	return time;
-=======
->>>>>>> thomas-dev
 }
 
 void generate_end_message(char *str_1, char *str_2, struct ChessBoard *board)
