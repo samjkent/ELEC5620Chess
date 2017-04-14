@@ -100,7 +100,8 @@ int main() {
 	// Initialise LCD
 	LCD_Init();
 	ResetWDT();
-	vga_draw_test();
+	vga_clear_screen();
+	//vga_draw_test();
 	// Initialise timer
 	utimer_irq(1000000); // set 1s timer w/ auto reload
 
@@ -132,7 +133,8 @@ int main() {
 void display_menu(void) {
 	if (refresh_display) {
 		if (menu_begin) {
-			vga_draw_test();
+			//vga_draw_test();
+			vga_clear_screen();
 			LCD_Clear(LCD_BLACK);
 			menu_begin = 0;
 		}
@@ -168,6 +170,7 @@ void display_menu(void) {
 
 void display_game(void) {
 	int i;
+	//unsigned char* temp_str;
 
 	// INIT
 	// Initial run
@@ -177,7 +180,9 @@ void display_game(void) {
 
 		// Clear LCD
 		LCD_Clear(LCD_BLACK);
-		vga_draw_test();
+		vga_clear_screen();
+
+		//vga_draw_test();
 
 		// Set timer
 		time1.hours = 0;
@@ -203,8 +208,7 @@ void display_game(void) {
 		if (enter_pressed == 1) {
 			enter_pressed = 0;
 			//NOTE: The chess board's (0,0) = square A1
-			start_coordinate = BoardCoordinateConstructor(cursor_xy[0],
-					7 - cursor_xy[1]);
+			start_coordinate = BoardCoordinateConstructor(cursor_xy[0], 7 - cursor_xy[1]);
 
 			inputMoveStart(&chess_board, start_coordinate, &end_move_list);
 
@@ -237,9 +241,11 @@ void display_game(void) {
 		}
 		break;
 	case INPUT_PROMOTION:
-		// promotion_no = (convert keyboard input to a number)
-		//chess_board = inputPawnPromotion(chess_board, promotion_no);
-		move_made = 1;
+		if (promotion_no != 0)
+		{
+			inputPawnPromotion(&chess_board, promotion_no);
+			move_made = 1;
+		}
 		break;
 	default:
 		// Should be unreachable
@@ -247,6 +253,9 @@ void display_game(void) {
 			;
 		break;
 	}
+
+	// Reset the promotion number
+	promotion_no = 0;
 
 	if (move_made) {
 		move_made = 0;
@@ -263,11 +272,31 @@ void display_game(void) {
 	// DRAW
 	// Refresh the display only when something changes
 	if (refresh_display) {
-		sprintf(time_str, "%02d:%02d:%02d", time1.hours, time1.minutes,
-				time1.seconds);
+		sprintf(time_str, "%02d:%02d:%02d", time1.hours, time1.minutes, time1.seconds);
 		LCD_PutStr(1, 1, time_str, LCD_WHITE, LCD_BLACK);
 		LCD_DrawBoard(chess_board.board);
 		refresh_display = 0;
+
+		if (input_mode == INPUT_PROMOTION)
+		{
+			// Promotion piece = 1 for queen
+			// Promotion piece = 2 for knight
+			// Promotion piece = 3 for rook
+			// Promotion piece = 4 for bishop
+
+			//sprintf(temp_str, "1. Queen", time1.hours, time1.minutes, time1.seconds);
+			LCD_PutStr(1, 248, "1. Queen", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 256, "2. Knight", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 264, "3. Rook", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 272, "4. Bishop", LCD_WHITE, LCD_BLACK);
+		}
+		else
+		{
+			LCD_PutStr(1, 248, "          ", LCD_BLACK, LCD_BLACK);
+			LCD_PutStr(1, 256, "          ", LCD_BLACK, LCD_BLACK);
+			LCD_PutStr(1, 264, "          ", LCD_BLACK, LCD_BLACK);
+			LCD_PutStr(1, 272, "          ", LCD_BLACK, LCD_BLACK);
+		}
 	}
 }
 
