@@ -49,7 +49,7 @@ extern struct BoardCoordinate end_coordinate;
 void JP1_init(void)
 {
 	*JP1_DATA_DIR |= 0x1;
-	*JP1_IRQ_MASK &= ~0x2; //Initialise to masked - unmask in 2p serial mode
+	*JP1_IRQ_MASK = 0x2; //Initialise to masked - unmask in 2p serial mode
 	*JP1_DATA |= 0x1;
 }
 
@@ -101,6 +101,7 @@ void bit_timeout(void){
 	else
 	{
 		*HPS_TIMER0_CONTROL &= ~0x1; //stop timer
+		*JP1_DATA = 0x1 << TX_PIN;
 
 	}
 

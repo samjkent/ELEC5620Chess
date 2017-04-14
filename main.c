@@ -308,6 +308,7 @@ void display_game(void) {
 		last_move_highlight[end_coordinate.x] 	|= 0x1 << end_coordinate.y;
 		input_mode = NO_INPUT;
 		endGameCheck(&chess_board);
+		refresh_display = 1;
 	}
 
 	// DRAW
