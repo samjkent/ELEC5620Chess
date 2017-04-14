@@ -1,3 +1,4 @@
+
 #include "DE1-SoC_LT24.h"
 #include "Delay.h"
 #include "graphics_chess.h"
@@ -6,8 +7,8 @@
 #include "string.h"
 #include "drivers/vga_drv.h"
 
-char board_highlight[8] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
-char last_move_highlight[8] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+char board_highlight[8]			= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+char last_move_highlight[8]		= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 int cursor_xy[2] = { 0, 0 };
 
@@ -19,24 +20,30 @@ void LCD_DrawTile(int x, int y,
 	int i, j, k;
 	unsigned short buffer[576];
 
-	for (j = 0; j < TILE; j++) {
-		for (i = 0; i < 3; i++) {
-			for (k = 0; k < 8; k++) {
-				if (graphics_tile[j][i] & (0x80 >> k)) {
-					buffer[(j * TILE) + ((i * 8) + k)] = fg_colour;
+
+	for (j = 0; j < TILE; j++)
+	{
+		for (i = 0; i < 3; i++)
+		{
+			for (k = 0; k < 8; k++)
+			{
+				if (graphics_tile[j][i] & (0x80 >> k))
+				{
+					buffer[(j*TILE)+((i*8)+k)] = fg_colour;
 					//LCD_WR_DATA(fg_colour);
 					// Switch x and y
-					vga_write_pixel(216 - y * TILE + (j),
-							x * TILE + ((i * 8) + k), fg_colour, 1);
-				} else {
-					buffer[(j * TILE) + ((i * 8) + k)] = bg_colour;
+					vga_write_pixel(216-y*TILE+(j),x*TILE+((i*8)+k),fg_colour, 1);
+				}
+				else
+				{
+					buffer[(j*TILE)+((i*8)+k)] = bg_colour;
 					//LCD_WR_DATA(bg_colour);
-					vga_write_pixel(216 - y * TILE + (j),
-							x * TILE + ((i * 8) + k), bg_colour, 1);
+					vga_write_pixel(216-y*TILE+(j),x*TILE+((i*8)+k),bg_colour, 1);
 				}
 			}
 		}
 	}
+
 
 	LCD_Window(x * TILE, 216 - (y * TILE), TILE, TILE);
 	LCD_Framebuffer(buffer, 576);
@@ -48,18 +55,18 @@ void LCD_DrawBoard(char board[8][8]) {
 	int i, j;
 	unsigned short bg_colour;
 
-	for (i = 0; i < 8; i++) {
-		for (j = 0; j < 8; j++) {
-			if (i % 2 == j % 2) {
-				bg_colour = LCD_DARKBROWN;
-			} else {
-				bg_colour = LCD_LIGHTBROWN;
-			}
 
-			switch (board[i][j]) {
-			case BLANK:
-				LCD_DrawTile(i + 1, j + 1, graphics_blank, bg_colour,
-						LCD_WHITE);
+	for (i = 0; i < 8; i++)
+	{
+		for (j = 0; j < 8; j++)
+		{
+			if (i%2 == j%2) { bg_colour = LCD_DARKBROWN; }
+			else { bg_colour = LCD_LIGHTBROWN; }
+
+			switch (board[i][j])
+			{
+			case BLANK :
+				LCD_DrawTile(i+1, j+1, graphics_blank, bg_colour, LCD_WHITE);
 				//if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
 				break;
 			case PAW_W:
@@ -122,20 +129,19 @@ void LCD_DrawBoard(char board[8][8]) {
 
 			DrawCursor(cursor_xy[0], cursor_xy[1]);
 			// Highlight coordinates of the last piece's moves
-			if (last_move_highlight[i] & (0x80 >> 7 - j)) {
-				LCD_DrawRect((i + 1) * TILE,216 - ((j + 1) * TILE), TILE, TILE
-,						LCD_BLUE);
-					}
-				// Highlight space selected, and spaces where the piece can move
-			if (board_highlight[i] & (0x80 >> 7 - j)) {
-				LCD_DrawRect((i + 1) * TILE,216 - ((j + 1) * TILE), TILE, TILE
-,						LCD_CYAN);
-					}
-
-				}
+			if (last_move_highlight[i] & (0x80 >> 7 - j))
+			{
+				LCD_DrawRect((i + 1) * TILE,216 - ((j + 1) * TILE), TILE, TILE, LCD_BLUE);
+			}
+			// Highlight space selected, and spaces where the piece can move
+			if (board_highlight[i] & (0x80 >> 7 - j))
+			{
+				LCD_DrawRect((i + 1) * TILE,216 - ((j + 1) * TILE), TILE, TILE, LCD_CYAN);
 			}
 
-				//DrawCursor(cursor_xy[0],cursor_xy[1]);
+		}
+
+	}
 
 	ResetWDT();
 }
@@ -183,16 +189,22 @@ void LCD_PutStr(int x, int y, unsigned char * string, unsigned short bg_colour,
 		y = 0;
 	}
 
-	for (n = 0; n < len; n++) {
-		for (i = 0; i < 8; i++) {
-			for (j = 0; j < 8; j++) {
-				if (font8x8_basic[string[n]][i] & 1 << j) {
-					buffer[(8 * i * len) + ((8 * n) + j)] = fg_colour;
-					vga_write_pixel(y + (i), x + ((8 * n) + j), fg_colour, 1);
+	for (n = 0; n < len; n++)
+	{
+		for (i = 0; i < 8; i++)
+		{
+			for (j = 0; j < 8; j++)
+			{
+				if ( font8x8_basic[string[n]][i] & 1 << j)
+				{
+					buffer[(8*i*len)+((8*n)+j)] = fg_colour;
+					vga_write_pixel(y+(i),x+((8*n)+j),fg_colour, 1);
 					ResetWDT();
-				} else {
-					buffer[(8 * i * len) + ((8 * n) + j)] = bg_colour;
-					vga_write_pixel(y + (i), x + ((8 * n) + j), bg_colour, 1);
+				}
+				else
+				{
+					buffer[(8*i*len)+((8*n)+j)] = bg_colour;
+					vga_write_pixel(y+(i),x+((8*n)+j),bg_colour, 1);
 					ResetWDT();
 				}
 			}
@@ -223,7 +235,9 @@ void LCD_DrawLine(int x, int y, int dx, int dy, unsigned short colour) {
 }
 
 //Draw an orthogonal vector either Left->Right or Top->Bottom
-void LCD_DrawOrthoVect(int x, int y, int dir, int len, unsigned short colour) {
+
+void LCD_DrawOrthoVect(int x, int y, int dir, int len, unsigned short colour)
+{
 	int i, length_count;
 	unsigned short buffer[LCD_HEIGHT];
 
@@ -231,21 +245,24 @@ void LCD_DrawOrthoVect(int x, int y, int dir, int len, unsigned short colour) {
 		buffer[i] = colour;
 	}
 
-	if (dir) {
-		LCD_Window(x, y, len, 1);
-		for (length_count = 0; length_count < len;
-				length_count = length_count + 1) {
+	if (dir)
+	{
+		LCD_Window(x,y,len,1);
+		for(length_count = 0; length_count < len; length_count = length_count + 1)
+		{
 			// draw pixel
-			vga_write_pixel(y, x + length_count, colour, 1);
-		}
-	} else if (!dir) {
-		LCD_Window(x, y, 1, len);
-		for (length_count = 0; length_count < len;
-				length_count = length_count + 1) {
-			// draw pixel
-			vga_write_pixel(y + length_count, x, colour, 1);
+			vga_write_pixel(y,x+length_count,colour, 1);
 		}
 	}
+	else if (!dir) {
+		LCD_Window(x,y,1,len);
+		for(length_count = 0; length_count < len; length_count = length_count + 1)
+		{
+			// draw pixel
+			vga_write_pixel(y+length_count,x,colour, 1);
+		}
+	}
+
 
 	LCD_Framebuffer(buffer, len);
 
@@ -262,6 +279,9 @@ void LCD_DrawRect(int x, int y, int dx, int dy, unsigned short colour) {
 	ResetWDT();
 }
 
-void DrawCursor(int x, int y) {
-	LCD_DrawRect((x + 1) * 24, (y + 1) * 24, TILE, TILE, LCD_MAGENTA);
+
+void DrawCursor(int x, int y)
+{
+	LCD_DrawRect((x+1) * 24, (y+1) * 24, TILE, TILE, LCD_MAGENTA);
+
 }
