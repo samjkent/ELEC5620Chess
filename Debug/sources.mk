@@ -21,4 +21,5 @@ SUBDIRS := \
 . \
 drivers \
 config \
+ChessLogic \
 

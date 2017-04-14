@@ -57,6 +57,8 @@ __IRQ __cs3_isr_irq (void)
 	}
 	else if(int_ID == JP1_IRQ){
 		read_data();
+	} else if(int_ID == 1023){
+
 	} else
 		// if unexpected, then stay here
 		while (1);

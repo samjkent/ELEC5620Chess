@@ -17,6 +17,7 @@ void vga_write_pixel(int x, int y, short colour, int x_inv){
 
 }
 
+/*
 void vga_draw_test(void){
 	for (x = 0; x < 320; x++){
 		for(y = 0; y < 240; y++){
@@ -25,6 +26,7 @@ void vga_draw_test(void){
 		}
 	}
 }
+*/
 
 void vga_clear_screen(void){
 	for (x = 0; x < 320; x++){

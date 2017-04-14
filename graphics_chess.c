@@ -7,14 +7,15 @@
 #include "string.h"
 #include "drivers/vga_drv.h"
 
-char board_highlight[8]= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+char board_highlight[8]			= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+char last_move_highlight[8]		= { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 int cursor_xy[2] = {0, 0};
 
 
 //int strlen(const char * str);
 
-void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour)
+void LCD_DrawTile(int x, int y, const unsigned char graphics_tile[ROWS_24_24][COLS_24_24], unsigned short bg_colour, unsigned short fg_colour)
 {
 	int i, j, k;
 	unsigned short buffer[576];
@@ -30,13 +31,13 @@ void LCD_DrawTile(int x, int y, unsigned char graphics_tile[ROWS_24_24][COLS_24_
 					buffer[(j*TILE)+((i*8)+k)] = fg_colour;
 					//LCD_WR_DATA(fg_colour);
 					// Switch x and y
-					vga_write_pixel(y*TILE+(j),x*TILE+((i*8)+k),fg_colour, 1);
+					vga_write_pixel(216-y*TILE+(j),x*TILE+((i*8)+k),fg_colour, 1);
 				}
 				else
 				{
 					buffer[(j*TILE)+((i*8)+k)] = bg_colour;
 					//LCD_WR_DATA(bg_colour);
-					vga_write_pixel(y*TILE+(j),x*TILE+((i*8)+k),bg_colour, 1);
+					vga_write_pixel(216-y*TILE+(j),x*TILE+((i*8)+k),bg_colour, 1);
 				}
 			}
 		}
@@ -121,7 +122,12 @@ void LCD_DrawBoard(char board[8][8])
 			}
 
 			DrawCursor(cursor_xy[0],cursor_xy[1]);
-			if (board_highlight[i] & 0x80 >> j) { LCD_DrawRect((i+1) * 24, (j+1) * 24, TILE, TILE, LCD_CYAN); }
+			if (board_highlight[i] & (0x80 >> 7-j)) {
+				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_CYAN);
+			}
+			if (last_move_highlight[i] & (0x80 >> 7-j)) {
+				LCD_DrawRect((i+1) * TILE,216 - ((j+1) * TILE), TILE, TILE, LCD_BLUE);
+			}
 		}
 	}
 
