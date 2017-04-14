@@ -60,6 +60,7 @@ int menu_begin = 1;
 unsigned char* time_str;
 #define GAME 1
 int game_begin = 1;
+int game_mode = 0;
 
 // Chess input state machine
 
@@ -67,6 +68,8 @@ int game_begin = 1;
 #define INPUT_START 	1
 #define INPUT_END 		2
 #define INPUT_PROMOTION 3
+#define OPP_P_MOVE		4
+
 int input_mode = 0;
 int move_made = 0;
 int promotion_no = 0;
@@ -82,6 +85,11 @@ void send_ir_byte(char);
 //Serial comms test
 void send_data(int data);
 struct ChessBoard chess_board;
+int move_data;
+
+// Keys
+void key_IRQ_set(int state);
+void key_IRQ_toggle(void);
 
 int main() {
 
@@ -187,7 +195,10 @@ void display_game(void) {
 		// Clear game_begin flag
 		game_begin = 0;
 
-		send_data(0xF0F0);
+		// Disable keyboard if P2
+		if(game_mode == 2 && chess_board.white_turn == 1) {
+			key_IRQ_set(0);
+		}
 
 		//send_ir_byte(0x00);
 		//send_ir_byte(0x44);
@@ -231,6 +242,15 @@ void display_game(void) {
 				if (chess_board.promotion & 0x88) {
 					input_mode = INPUT_PROMOTION;
 				} else {
+					key_IRQ_toggle();
+
+					move_data = 0;
+					move_data += ((start_coordinate.x) & 0xF) << 12;
+					move_data += ((start_coordinate.y) & 0xF) << 8;
+					move_data += ((end_coordinate.x	 ) & 0xF) << 4;
+					move_data += ((end_coordinate.y	 ) & 0xF) << 0;
+
+					send_data(move_data);
 					move_made = 1;
 				}
 			}
@@ -241,6 +261,11 @@ void display_game(void) {
 		//chess_board = inputPawnPromotion(chess_board, promotion_no);
 		move_made = 1;
 		break;
+	case OPP_P_MOVE:
+			inputEndMove(&chess_board, start_coordinate, end_coordinate);
+			key_IRQ_toggle();
+			move_made = 1;
+			break;
 	default:
 		// Should be unreachable
 		while (1)

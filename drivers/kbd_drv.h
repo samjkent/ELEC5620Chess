@@ -1,3 +1,6 @@
+#ifndef kbd_drv
+#define kbd_drv
+
 volatile int * PS2_Data = (int *) 0xFF200100;
 volatile int * PS2_Control = (int *) 0xFF200104;
 
@@ -16,3 +19,8 @@ volatile int * PS2_Control = (int *) 0xFF200104;
 #define KEY_SPACE 0x41
 #define KEY_ENTER 0x5A
 #define KEY_ESC 0x76
+
+void key_IRQ_set(int state);
+void key_IRQ_toggle(void);
+
+#endif

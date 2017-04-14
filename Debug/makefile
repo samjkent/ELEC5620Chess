@@ -22,10 +22,10 @@ RM := clean
 all: ELEC5620Chess.axf
 
 # Tool invocations
-ELEC5620Chess.axf: $(OBJS) C:\Users\Calum\Documents\DS-5_Workspace\ELEC5620Chess\config\scatterSD.scat $(USER_OBJS) $(LIBS)
+ELEC5620Chess.axf: $(OBJS) /home/sam/ds5/ELEC5620Chess/config/scatterSD.scat $(USER_OBJS) $(LIBS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	armlink --entry=__main --cpu=Cortex-A9.no_neon.no_vfp --scatter="C:\Users\Calum\Documents\DS-5_Workspace\ELEC5620Chess\config\scatterSD.scat" --info=sizes -o "ELEC5620Chess.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	armlink --entry=__main --cpu=Cortex-A9.no_neon.no_vfp --scatter="/home/sam/ds5/ELEC5620Chess/config/scatterSD.scat" --info=sizes -o "ELEC5620Chess.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

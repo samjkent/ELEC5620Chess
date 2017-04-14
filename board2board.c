@@ -1,5 +1,6 @@
 #include "address_map_arm.h"
 #include "graphics_chess.h"
+#include "ChessLogic/ChessBoard.h"
 
 #define JP1_BASE 				0xFF200060
 #define INTERVAL_TIMER_BASE 	0xFF202000
@@ -38,6 +39,11 @@ int tx_data;
 int rx_data;
 
 char buffer[2];
+
+extern int input_mode;
+extern struct BoardCoordinate start_coordinate;
+extern struct BoardCoordinate end_coordinate;
+
 
 void JP1_init(void)
 {
@@ -122,6 +128,13 @@ void read_timeout(){
 		hps_start_timer1(BIT_PERIOD); // Reload
 	} else {
 		rx_data = rx_data >> 1; // Remove start bit
+		// Set start and end coords
+		start_coordinate.x 	= (rx_data & 0xF000) >> 12;
+		start_coordinate.y 	= (rx_data & 0x0F00) >> 8;
+		end_coordinate.x 	= (rx_data & 0x00F0) >> 4;
+		end_coordinate.y 	= (rx_data & 0x000F) >> 0;
+
+		input_mode = 4; // OPP_P_MODE
 		*HPS_TIMER1_CONTROL &= ~0x1; //stop timer
 		*JP1_IRQ_MASK |= 0x2;
 	}

@@ -24,6 +24,7 @@ void board_move(int x);
 extern int cursor_xy[2];
 extern int cursor_menu;
 extern int mode;
+extern int game_mode;
 
 extern int input_mode;
 
@@ -81,7 +82,8 @@ void board_deselect(void){
 void board_select(void){
 	if(mode == 0){
 		// Set mode
-		mode = cursor_menu + 1;
+		mode = 1;
+		game_mode = cursor_menu;
 
 		// Reset cursors
 		cursor_xy[0] = 0;
@@ -175,5 +177,14 @@ void kbd_interrupt(void){
 
 	// Update display flag
 	refresh_display = 1;
+
+}
+
+void key_IRQ_set(int state){
+	*PS2_Control |= state << 0;
+}
+
+void key_IRQ_toggle(void){
+	*PS2_Control ^= 1 << 0;
 
 }
