@@ -1,0 +1,20 @@
+ROM_LOAD 0x0 0x4000
+{
+    ROM_EXEC 0x0 0x100
+    {
+        ; Place exception vector table at 0x00000000.
+        ; Contains instructions to load PC with IRQ_ISR address.
+        vectors.o (VECTORS, +FIRST)
+    }
+}
+
+
+SDRAM 0x02000000 0x02000000  ; 32M SDRAM
+{     
+	APP_CODE  + 0    
+	{        
+		* (+ RO , + RW , + ZI )    
+	}     
+	ARM_LIB_STACKHEAP 0x03000000 EMPTY 0x01000000 ; Application heap and stack    
+	{ }
+}
