@@ -106,7 +106,7 @@ void board_select(void) {
 		if (input_mode == 0) {
 			input_mode = 1;
 		}
-		board_deselect();
+		//board_deselect();
 		// Copy current xy position to selected position
 		// Do not update highlight if input_mode == INPUT_END
 		if (input_mode != 2) {

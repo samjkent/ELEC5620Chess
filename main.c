@@ -49,6 +49,8 @@ void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour
 void display_menu(void);
 void display_game(void);
 
+void board_deselect(void);
+
 // Refresh when something changes
 extern int refresh_display;
 int mode = 0; // Init to menu
@@ -201,7 +203,7 @@ void display_game(void) {
 		// Clear LCD
 		LCD_Clear(LCD_BLACK);
 		vga_clear_screen();
-
+		board_deselect();
 		//vga_draw_test();
 
 		// Set timer
@@ -261,6 +263,8 @@ void display_game(void) {
 
 			end_coordinate = BoardCoordinateConstructor(cursor_xy[0],7 - cursor_xy[1]);
 			if (isMoveInMoveList(end_move_list, end_coordinate)) {
+
+				board_deselect();
 				inputEndMove(&chess_board, start_coordinate, end_coordinate);
 
 				// Check for pawn promotion
