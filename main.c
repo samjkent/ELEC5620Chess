@@ -94,6 +94,7 @@ void send_ir_byte(char);
 void send_data(int data);
 struct ChessBoard chess_board;
 int move_data;
+extern int serial_pawn_promo;
 
 // Keys
 void key_IRQ_set(unsigned int state);
@@ -286,11 +287,27 @@ void display_game(void) {
 		if (promotion_no != 0)
 		{
 			inputPawnPromotion(&chess_board, promotion_no);
+			if(game_mode != 0){
+				// 2P send updates
+				//key_IRQ_toggle();
+				move_data = 0;
+				move_data += ((start_coordinate.x) & 0xF) << 12;
+				move_data += ((start_coordinate.y) & 0xF) << 8;
+				move_data += ((end_coordinate.x	 ) & 0xF) << 4;
+				move_data += ((end_coordinate.y	 ) & 0xF) << 0;
+
+				send_data(0xAAA + promotion_no);
+				send_data(move_data);
+			}
 			move_made = 1;
 		}
 		break;
 	case OPP_P_MOVE:
 			inputEndMove(&chess_board, start_coordinate, end_coordinate);
+			if(serial_pawn_promo != 0){
+				inputPawnPromotion(&chess_board, serial_pawn_promo);
+				serial_pawn_promo = 0;
+			}
 			move_made = 1;
 			break;
 	default:

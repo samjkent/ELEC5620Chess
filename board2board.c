@@ -37,6 +37,7 @@ extern char board[8][8];
 int bit_count = 0;
 int tx_data;
 int rx_data;
+int serial_pawn_promo;
 
 char buffer[2];
 
@@ -126,6 +127,10 @@ int check_valid_packet(int packet){
 	a1 = (rx_data & 0x0F00) >> 8;
 	a2 = (rx_data & 0x00F0) >> 4;
 	a3 = (rx_data & 0x000F) >> 0;
+
+	if(a0 == 0xA && a1 == 0xA && a2 == 0xA){
+		serial_pawn_promo = a3;
+	}
 
 	if(a0 > 7 || a1 > 7 || a2 > 7 || a3 >7){
 		return 0; // Invalid
