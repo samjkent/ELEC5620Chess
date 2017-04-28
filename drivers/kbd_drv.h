@@ -21,7 +21,7 @@ volatile int * PS2_Control = (int *) 0xFF200104;
 
 #define KEY_Q 0x15
 
-#define KEY_SPACE 0x41
+#define KEY_SPACE 0x29
 #define KEY_ENTER 0x5A
 #define KEY_ESC 0x76
 
