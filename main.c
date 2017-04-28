@@ -417,6 +417,9 @@ void decrease_time1(void) {
 void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour)
 {
 	unsigned short buffer[LCD_WIDTH * 16] = {0};
+
+	int i, j;
+
 	LCD_Window(0, 232, LCD_WIDTH, 16 );
 	LCD_Framebuffer(buffer,LCD_WIDTH*16);
 
@@ -424,31 +427,37 @@ void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour
 	{
 		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Black wins!")/2) * 8),240,"Black wins!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x02)
 	{
 		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("White wins!")/2) * 8),240,"White wins!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x04)
 	{
 		LCD_PutStr((240/2) - ((strlen("Stalemate!"		)/2) * 8),232,"Stalemate!"		,fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Game is drawn!"	)/2) * 8),240,"Game is drawn!"	,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x08)
 	{
 		LCD_PutStr((240/2) - ((strlen("Insufficient mating material!")/2) * 8),232,	"Insufficient mating material!", fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Game is drawn!")/2) * 8),240, "Game is drawn!"	,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x10)
 	{
 		LCD_PutStr((240/2) - ((strlen("50 move rule!"	)/2) * 8),232,"50 move rule!"	,fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Game is drawn!"	)/2) * 8),240,"Game is drawn!"	,fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x20)
 	{
 		LCD_PutStr((240/2) - ((strlen("Threefold Repetition!")/2) * 8),232,"Threefold Repetition!",fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Game is drawn!")/2) * 8),240,"Game is drawn!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else
 	{
@@ -461,6 +470,10 @@ void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour
 		{
 			//LCD_PutStr((240/2) - ((strlen("              ")/2) * 8),240,"              ",LCD_BLACK,LCD_BLACK);
 			LCD_PutStr((240/2) - ((strlen("Black in check")/2) * 8),232,"Black in check",fg_colour,bg_colour);
+		}
+		else
+		{
+			LCD_PutStr(0, 232, "                         ", LCD_BLACK, LCD_BLACK);
 		}
 
 		if (board->white_turn)
