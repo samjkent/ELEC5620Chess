@@ -51,7 +51,7 @@ void board_move(int direction) {
 	case 1:
 		if (cursor_xy[1] < 7)
 			cursor_xy[1]++;
-		if (cursor_menu != 3)
+		if (cursor_menu != 2)
 			cursor_menu++;
 		break;
 	case 2:

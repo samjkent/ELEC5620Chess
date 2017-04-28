@@ -170,9 +170,6 @@ void display_menu(void) {
 		sprintf(menu_str, "Serial: Guest");
 		LCD_PutStr(20, 50, menu_str, LCD_BLACK, LCD_WHITE);
 
-		sprintf(menu_str, "Highscores");
-		LCD_PutStr(20, 60, menu_str, LCD_BLACK, LCD_WHITE);
-
 		// Clear cursor
 		sprintf(menu_str, " ");
 		LCD_PutStr(10, 30, menu_str, LCD_BLACK, LCD_WHITE);
@@ -209,11 +206,11 @@ void display_game(void) {
 
 		// Set timer
 		time1.hours = 0;
-		time1.minutes = 0; // 5 minute countdown
-		time1.seconds = 20;
+		time1.minutes = 5; // 5 minute countdown
+		time1.seconds = 0;
 		time2.hours = 0;
-		time2.minutes = 0; // 5 minute countdown
-		time2.seconds = 20;
+		time2.minutes = 5; // 5 minute countdown
+		time2.seconds = 0;
 
 		// Clear game_begin flag
 		game_begin = 0;
