@@ -42,6 +42,7 @@ void tick(struct time *time);
 void tock(struct time *time);
 
 void decrease_time1(void);
+void increment_time_sec(int sec);
 void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour);
 
 // Display Updates
@@ -205,11 +206,11 @@ void display_game(void) {
 
 		// Set timer
 		time1.hours = 0;
-		time1.minutes = 5; // 5 minute countdown
-		time1.seconds = 0;
+		time1.minutes = 0; // 5 minute countdown
+		time1.seconds = 20;
 		time2.hours = 0;
-		time2.minutes = 5; // 5 minute countdown
-		time2.seconds = 0;
+		time2.minutes = 0; // 5 minute countdown
+		time2.seconds = 20;
 
 		// Clear game_begin flag
 		game_begin = 0;
@@ -309,6 +310,7 @@ void display_game(void) {
 		{
 			last_move_highlight[i] = 0x00;
 		}
+		increment_time_sec(30);
 		last_move_highlight[start_coordinate.x] |= 0x1 << start_coordinate.y;
 		last_move_highlight[end_coordinate.x] 	|= 0x1 << end_coordinate.y;
 		input_mode = NO_INPUT;
@@ -400,11 +402,11 @@ void decrease_time1(void) {
 	// Clear interrupt
 	*(unsigned int *) 0xFFFEC60C = 0x1;
 
-	if (chess_board.white_turn == 1) //update white timer if white to move
+	if (chess_board.white_turn == 1 && !chess_board.end_game) //update white timer if white to move
 	{
 		tock(&time1);
 	}
-	else if (chess_board.white_turn == 0) //update black timer if black to move
+	else if (chess_board.white_turn == 0 && !chess_board.end_game) //update black timer if black to move
 	{
 		tock(&time2);
 	}
@@ -414,11 +416,33 @@ void decrease_time1(void) {
 
 }
 
+void increment_time_sec(int sec)
+{
+	int i;
+
+	if (chess_board.white_turn == 1 && !chess_board.end_game) //update white timer if white to move
+	{
+		for (i = 0; i < sec; i++)
+		{
+			tick(&time2);
+		}
+	}
+	else if (chess_board.white_turn == 0 && !chess_board.end_game) //update black timer if black to move
+	{
+		for (i = 0; i < sec; i++)
+		{
+			tick(&time1);
+		}
+	}
+
+}
+
 void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour)
 {
 	unsigned short buffer[LCD_WIDTH * 16] = {0};
 	LCD_Window(0, 232, LCD_WIDTH, 16 );
 	LCD_Framebuffer(buffer,LCD_WIDTH*16);
+
 
 	if (board->end_game & 0x01)
 	{
@@ -449,6 +473,18 @@ void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour
 	{
 		LCD_PutStr((240/2) - ((strlen("Threefold Repetition!")/2) * 8),232,"Threefold Repetition!",fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Game is drawn!")/2) * 8),240,"Game is drawn!",fg_colour,bg_colour);
+	}
+	else if (!time1.hours && !time1.minutes && !time1.seconds)
+	{
+		LCD_PutStr((240/2) - ((strlen("White out of time!")/2) * 8),232,"White out of time!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Black Wins!")/2) * 8),240,"Black Wins!",fg_colour,bg_colour);
+		board->end_game = 0x40;
+	}
+	else if (!time2.hours && !time2.minutes && !time2.seconds)
+	{
+		LCD_PutStr((240/2) - ((strlen("Black out of time!")/2) * 8),232,"Black out of time!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("White Wins!")/2) * 8),240,"White Wins!",fg_colour,bg_colour);
+		board->end_game = 0x80;
 	}
 	else
 	{
