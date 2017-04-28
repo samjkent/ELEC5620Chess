@@ -194,6 +194,7 @@ void display_game(void) {
 	// INIT
 	// Initial run
 	if (game_begin) {
+		input_mode = 0;
 		// Initialise chess board
 		initChessBoard(&chess_board);
 		for (i = 0; i < 8; i++)
@@ -369,17 +370,17 @@ void display_game(void) {
 			// Promotion piece = 4 for bishop
 
 			//sprintf(temp_str, "1. Queen", time1.hours, time1.minutes, time1.seconds);
-			LCD_PutStr(1, 248, "1. Queen", LCD_WHITE, LCD_BLACK);
-			LCD_PutStr(1, 256, "2. Knight", LCD_WHITE, LCD_BLACK);
-			LCD_PutStr(1, 264, "3. Rook", LCD_WHITE, LCD_BLACK);
-			LCD_PutStr(1, 272, "4. Bishop", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 256, "1. Queen", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 264, "2. Knight", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 272, "3. Rook", LCD_WHITE, LCD_BLACK);
+			LCD_PutStr(1, 280, "4. Bishop", LCD_WHITE, LCD_BLACK);
 		}
 		else
 		{
-			LCD_PutStr(1, 248, "          ", LCD_BLACK, LCD_BLACK);
 			LCD_PutStr(1, 256, "          ", LCD_BLACK, LCD_BLACK);
 			LCD_PutStr(1, 264, "          ", LCD_BLACK, LCD_BLACK);
 			LCD_PutStr(1, 272, "          ", LCD_BLACK, LCD_BLACK);
+			LCD_PutStr(1, 280, "          ", LCD_BLACK, LCD_BLACK);
 		}
 	}
 }
@@ -471,13 +472,13 @@ void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour
 	if (board->end_game & 0x01)
 	{
 		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
-		LCD_PutStr((240/2) - ((strlen("Black wins!")/2) * 8),240,"Black wins!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen(" Black Wins! ")/2) * 8),240," Black Wins! ",fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x02)
 	{
 		LCD_PutStr((240/2) - ((strlen("Checkmate!" )/2) * 8),232,"Checkmate!" ,fg_colour,bg_colour);
-		LCD_PutStr((240/2) - ((strlen("White wins!")/2) * 8),240,"White wins!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen(" White wins! ")/2) * 8),240," White wins! ",fg_colour,bg_colour);
 		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 	}
 	else if (board->end_game & 0x04)
@@ -507,13 +508,15 @@ void generate_end_message(struct ChessBoard *board, int bg_colour, int fg_colour
 	else if (!time1.hours && !time1.minutes && !time1.seconds)
 	{
 		LCD_PutStr((240/2) - ((strlen("White out of time!")/2) * 8),232,"White out of time!",fg_colour,bg_colour);
-		LCD_PutStr((240/2) - ((strlen("Black Wins!")/2) * 8),240,"Black Wins!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen(" Black Wins! ")/2) * 8),240," Black Wins! ",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 		board->end_game = 0x40;
 	}
 	else if (!time2.hours && !time2.minutes && !time2.seconds)
 	{
 		LCD_PutStr((240/2) - ((strlen("Black out of time!")/2) * 8),232,"Black out of time!",fg_colour,bg_colour);
-		LCD_PutStr((240/2) - ((strlen("White Wins!")/2) * 8),240,"White Wins!",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen(" White Wins! ")/2) * 8),240," White Wins! ",fg_colour,bg_colour);
+		LCD_PutStr((240/2) - ((strlen("Press 'q' to quit...")/2) * 8),248,"Press 'q' to quit...",fg_colour,bg_colour);
 		board->end_game = 0x80;
 	}
 	else
