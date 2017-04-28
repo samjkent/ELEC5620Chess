@@ -43,7 +43,7 @@ char buffer[2];
 extern int input_mode;
 extern struct BoardCoordinate start_coordinate;
 extern struct BoardCoordinate end_coordinate;
-
+extern promotion_no;
 
 
 void JP1_init(void)
@@ -94,7 +94,7 @@ void bit_timeout(void){
 	*JP1_DATA ^= (-((tx_data >> bit_count) & 0x1)^ *JP1_DATA) & (1 << TX_PIN); // set nth bit to x
 	++bit_count;
 
-	if (bit_count < 17)
+	if (bit_count < 21)
 	{
 		hps_start_timer0(BIT_PERIOD);
 	}
@@ -142,7 +142,7 @@ void read_timeout(){
 	rx_data ^= (-((*JP1_DATA >> RX_PIN) & 0x1)^ rx_data) & (1 << bit_count); // set nth bit to x
 	++bit_count;
 
-	if(bit_count < 17){
+	if(bit_count < 21){
 		hps_start_timer1(BIT_PERIOD); // Reload
 	} else {
 		rx_data = rx_data >> 1; // Remove start bit
@@ -155,12 +155,13 @@ void read_timeout(){
 		}
 
 		// Set start and end coords
-		start_coordinate.x 	= (rx_data & 0xF000) >> 12;
-		start_coordinate.y 	= (rx_data & 0x0F00) >> 8;
-		end_coordinate.x 	= (rx_data & 0x00F0) >> 4;
-		end_coordinate.y 	= (rx_data & 0x000F) >> 0;
+		start_coordinate.x 	= (rx_data & 0xF0000)  >> 16;
+		start_coordinate.y 	= (rx_data & 0x0F000)  >> 12;
+		end_coordinate.x 	= (rx_data & 0x00F00)  >> 8;
+		end_coordinate.y 	= (rx_data & 0x000F0)  >> 4;
+        promotion_no 		= (rx_data & 0x0000F)  >> 0;
 
-		key_IRQ_set(1);
+        key_IRQ_set(1);
 
 		input_mode = 4; // OPP_P_MODE
 		//*JP1_IRQ_MASK |= 0x2;

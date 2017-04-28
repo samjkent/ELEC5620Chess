@@ -276,7 +276,7 @@ void display_game(void) {
 						move_data += ((end_coordinate.x	 ) & 0xF) << 4;
 						move_data += ((end_coordinate.y	 ) & 0xF) << 0;
 
-						send_data(move_data);
+						send_data(move_data << 4);
 					}
 					move_made = 1;
 				}
@@ -287,11 +287,28 @@ void display_game(void) {
 		if (promotion_no != 0)
 		{
 			inputPawnPromotion(&chess_board, promotion_no);
+			if(game_mode != 0){ // 2P send updates
+				//key_IRQ_toggle();
+
+				move_data = 0;
+				move_data += ((start_coordinate.x) & 0xF) << 12;
+				move_data += ((start_coordinate.y) & 0xF) << 8;
+				move_data += ((end_coordinate.x	 ) & 0xF) << 4;
+				move_data += ((end_coordinate.y	 ) & 0xF) << 0;
+
+				send_data((move_data << 4) | promotion_no);
+			}
 			move_made = 1;
+
 		}
 		break;
 	case OPP_P_MOVE:
 			inputEndMove(&chess_board, start_coordinate, end_coordinate);
+
+			if (promotion_no > 0) {
+				inputPawnPromotion(&chess_board, promotion_no);
+			}
+
 			move_made = 1;
 			break;
 	default:
