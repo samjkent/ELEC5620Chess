@@ -13,11 +13,11 @@ struct Move moveConstructor(struct ChessBoard *board, struct BoardCoordinate sta
 	return move;
 }
 
-char isSpaceAttacked(struct ChessBoard *board, char x, char y)
+char isSpaceAttacked(struct ChessBoard *board, char x, char y, char white_piece)
 {
 	struct MoveCoordinateList moves;
 
-	char white_piece = isPieceWhiteXY(board, x, y);
+	//char white_piece = isPieceWhiteXY(board, x, y);
 
 	int i;
 	int j;
@@ -405,11 +405,11 @@ void updateKingChecks(struct ChessBoard *board)
 	// Check if space is attacked
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
-			if (board->board[i][j] == WKING && isSpaceAttacked(board, i, j))
+			if (board->board[i][j] == WKING && isSpaceAttacked(board, i, j, 1))
 			{
 				out |= 0x08;
 			}
-			else if (board->board[i][j] == BKING && isSpaceAttacked(board, i, j))
+			else if (board->board[i][j] == BKING && isSpaceAttacked(board, i, j, 0))
 			{
 				out |= 0x80;
 			}
@@ -1003,8 +1003,9 @@ void getKingMoves(struct ChessBoard *board, struct BoardCoordinate start, struct
 	char castle_row;
 	char king_info_bitshift;
 	int index = 0;
+	char white_piece = isPieceWhite(board, start);
 
-	if (isPieceWhite(board, start))
+	if (white_piece)
 	{
 		castle_row = 0;
 		king_info_bitshift = 0;
@@ -1023,7 +1024,7 @@ void getKingMoves(struct ChessBoard *board, struct BoardCoordinate start, struct
 	// Castling
 	// Kingside castling
 	// If the king is not in check, the spaces between the king and rook are empty, the spaces the king moves are not attacked and neither pieces have moved then castling is allowed
-	if ((board->king_info & (0x0B << king_info_bitshift)) == 0x00 && board->board[5][castle_row] == BLANK && board->board[6][castle_row] == BLANK && !isSpaceAttacked(board, 5, castle_row) && !isSpaceAttacked(board, 6, castle_row))
+	if ((board->king_info & (0x0B << king_info_bitshift)) == 0x00 && board->board[5][castle_row] == BLANK && board->board[6][castle_row] == BLANK && !isSpaceAttacked(board, 5, castle_row, white_piece) && !isSpaceAttacked(board, 6, castle_row, white_piece))
 	{
 		// Castle
 		moves.moves[index] = BoardCoordinateConstructor(start.x + 2, castle_row);
@@ -1031,7 +1032,7 @@ void getKingMoves(struct ChessBoard *board, struct BoardCoordinate start, struct
 	}
 
 	// Queenside Castling
-	if ((board->king_info & (0x0D << king_info_bitshift)) == 0x00 && board->board[3][castle_row] == BLANK && board->board[2][castle_row] == BLANK && board->board[1][castle_row] == BLANK && !isSpaceAttacked(board, 3, castle_row) && !isSpaceAttacked(board, 2, castle_row))
+	if ((board->king_info & (0x0D << king_info_bitshift)) == 0x00 && board->board[3][castle_row] == BLANK && board->board[2][castle_row] == BLANK && board->board[1][castle_row] == BLANK && !isSpaceAttacked(board, 3, castle_row, white_piece) && !isSpaceAttacked(board, 2, castle_row, white_piece))
 	{
 		// Castle
 		moves.moves[index] = BoardCoordinateConstructor(start.x - 2, castle_row);

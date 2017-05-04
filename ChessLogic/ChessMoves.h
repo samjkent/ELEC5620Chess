@@ -41,7 +41,7 @@ char canBlackMove(struct ChessBoard *board);
 
 char moveCheck(struct ChessBoard *board, char white_move, char x, char y);
 
-char isSpaceAttacked(struct ChessBoard *board, char x, char y);
+char isSpaceAttacked(struct ChessBoard *board, char x, char y, char white_piece);
 
 
 char isMoveInMoveList(struct MoveCoordinateList moveList, struct BoardCoordinate move);
